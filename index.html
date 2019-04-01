@@ -285,6 +285,1786 @@
 
 
   
+    <article id="post-e5-bc-ba-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-94-a8-e4-ba-8e-e6-99-ba-e8-83-bd-e6-b2-b9-e7-94-b0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/21/e5-bc-ba-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-94-a8-e4-ba-8e-e6-99-ba-e8-83-bd-e6-b2-b9-e7-94-b0/">强化学习用于智能油田</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/21/e5-bc-ba-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-94-a8-e4-ba-8e-e6-99-ba-e8-83-bd-e6-b2-b9-e7-94-b0/" class="archive-article-date">
+  	<time datetime="2019-03-20T22:01:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>强化学习是连接主义学习的一种，和监督学习、非监督学习的区别和联系在于，非监督学习不需要样本，监督学习和强化学习需要样本，监督学习评价标准是对错，而强化学习的评价标准是好坏，强化学习更符合人类的学习过程。</p>
+<p>1强化学习的发展</p>
+<p>强化学习（reinforcement learning）是从动物学习、参数扰动、自适应控制等理论发展而来，大概20年前就用于象棋（IBM深蓝机器人）比赛，并战胜了最聪明的人类。强化学习来自于行为心理学，最早数学心理学家认为动物和人类学习行为是随机进行的。50年代发展了所谓的随机学习模型，后来奖励和惩罚等概念的出现，研究系统越来越趋向于监督学习；60年代后来新规则改变了监督学习规则，新规则可实现强化学习，即根据成功和失败的信号学习，代替原理的使用训练样本进行学习，使用有评价的学习代替有监督的学习；70年代强化学习主要用来解决随机控制系统的学习控制问题；80年代后，随着人们对人工神经网络的研究不断取得进展，以及计算机技术的进步，产生了许多的强化学习算法，这个时期强化学习快速发展，比如1988年Sutton提出的瞬时差分方法（Temporal difference method），自适应启发评价算法（Adaptive heuristic critic algorithm，AHC），离散动作AHC算法的神经网络实现（The neural network implement of AHC algorithm for discrete actions），连续动作的AHC算法（AHC algorithm for continuous actions）。</p>
+<p>2强化学习的应用</p>
+<p>强化学习的应用领域有游戏比赛、控制系统、机器人、调度管理等。强化学习需要考虑的问题有三方面：</p>
+<p>（1）如何表示状态空间和动作空间；</p>
+<p>（2）如何选择建立信号以及如何通过学习来修正不同状态-动作对的值；</p>
+<p>（3）如何根据这些值来选择合适的动作。</p>
+<p>标准的强化学习，智能体作为学习系统，获取外部的当前状态信息s，对环境采取试探行为u，并获取环境反馈的对此动作的评价r和新的环境状态。如果智能体的某动作u导致环境正的奖赏，那么智能体以后产生这个动作的趋势便会加强；反之，智能体产生这个动作的趋势将减弱。在学习系统的控制行为与环境反馈的状态即评价的反复交互作用中，以学习的方式不断修改从状态到动作的映射策略，以达到优化系统性能的目的。</p>
+<p>强化学习在国际上十分活跃的研究领域，在研究强化学习是应注意一下几个问题：</p>
+<p>（1）连续状态和连续动作问题。通常研究的强化学习系统，其系统和动作都认为是有限的集合，儿在实际问题中，其状态和动作往往是连续的，而连续空间的强化学习问题，目前研究的还不深入。</p>
+<p>（2）非马尔科夫问题。环境从一个状态转移到另一个状态不一定是马氏过程，若环境是非马氏过程，一些算法的学习效果可能不好，甚至不收敛。</p>
+<p>（3）探索和成绩问题。强化学习系统必须对这二者进行这种处理，即获得知识和获得搞回报之间进行折衷。探索对学习来说是非常重要的，只有通过探索才能确定最优策略，而过多的探索会降低系统的性能，甚至在某些情况下对学习产生不利的影响。</p>
+<p>3 强化学习用于正演和反演</p>
+<p>反演问题中的参数调整和下棋一样，每一个棋子相当于一个参数，每个棋子的位置相当于参数的值，棋子走过的路径相当于参数的调整过程，棋局的输赢相当于正演结果和观测数据吻合程度的好坏，棋局输赢问题相当于动态地调整参数达到最佳反演效果。下棋属于离散的、有限状态的优化问题，而很多反演问题是连续参数空间的优化问题，学习的难度更大。</p>
+<p>强化学习把学习看作试探评价过程，Agent（相当于一个正演模型）选择一个动作用于环境，环境接受该动作后状态发生变化，同时产生一个强化信号（奖或惩）反馈给Agent，Agent根据强化信号和环境当前状态再选择下一个动作，选择的原则是收到正强化的概率增大。强化学习中，由环境提供的强化信号是对产生动作的好坏作一种评价，而不是告诉强化学习系统（reinforcement learning system）如何去产生正确的动作，由于外部环境提供的信息很少，RLS必须靠自身的经历进行学习。通过这种方式，Agent再行动—评价的环境中获得知识，改进行动方案——适应环境。</p>
+<p>强化学习系统学习的目标是动态地调整参数，以达到强化信号最大。若已知r/A梯度信息，则可直接使用监督学习算法。因为强化信号r与Agent产生的动作A没有明确的函数形式描述，所以梯度信息r/A无法得到。因此，在强化学习系统中，需要某种随机单元，使用这种随机单元，Agent在可能动作中进行搜索并发现正确的动作（机器人的每一个动作都是瞬时优化的结果，每个动作都是一个正演模型）。</p>
+<p>智能油田中强化学习的使用方式是：（1）建立初步的地质模型，开展数值模拟模拟；（2）根据剩余油分布部署新井，即扰动；（2）根据新井的表现评价该动作的好坏，并检测环境的变化，即油藏动静态特征；（3）根据评价的好坏与检测数据，返回步骤（1），修改地质模型，开展新的数值模拟，完成闭合优化循环。</p>
+<p>研究连续空间的强化学习问题有助于解决更大范围的模型反演问题，后文待续。</p>
+<p>参考文献</p>
+<p>强化学习的百度百科</p>
+<p>张汝波, 顾国昌. 强化学习理论,算法及应用[J]. 控制理论与应用, 2000, 17(5):637-642.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/人工智能//" class="article-tag-list-link color5">人工智能</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/21/e5-bc-ba-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-94-a8-e4-ba-8e-e6-99-ba-e8-83-bd-e6-b2-b9-e7-94-b0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-e5-9c-b0-e8-b4-a8-e5-bb-ba-e6-a8-a1-e6-96-b0-e4-b9-a6-e5-87-ba-e7-89-88" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/15/e5-9c-b0-e8-b4-a8-e5-bb-ba-e6-a8-a1-e6-96-b0-e4-b9-a6-e5-87-ba-e7-89-88/">地质建模新书出版</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/15/e5-9c-b0-e8-b4-a8-e5-bb-ba-e6-a8-a1-e6-96-b0-e4-b9-a6-e5-87-ba-e7-89-88/" class="archive-article-date">
+  	<time datetime="2019-03-15T07:05:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们团队耗时五年撰写的关于地质建模的书终于出版了，书名是《油气藏定量地质建模方法与应用》，由石油工业出版社出版。这是关于油气藏定量地质建模方面比较综合的一本书，涵盖了基础方法理论和实际应用，从建模流程、构造建模、相建模、属性建模、裂缝建模，到多点地质统计学建模、沉积过程建模、地震约束、模型粗化、模型优选、模型不确定性评价和建模实例等，非常详尽，可以作为开发地质专业研究生的参考书，也可以作为开发地质工程师、油藏工程师、地质建模相关研究人员的工具书。</p>
+<p>目前市场上关于油气藏地质建模的书已经有很多，这本书有什么好的吗？市场的书有些太偏重理论（比如开发地质学，地质统计学等），实践性比较弱；更多的书则太偏重实例，仅仅针对某个油气藏、某类油气藏或某个地区的建模（比如缝洞型油藏建模、碳酸盐岩油藏建模、碎屑岩油藏建模等），缺乏普适性，还很缺少高质量的油气藏地质建模方面的书。</p>
+<p>这本书是好书的吗？这个很难说，需要大家的评判，看销量如何。虽然这本书覆盖了地质建模的方方面面，但是并不是泛泛地涉及，其中基于沉积过程的建模和多点地质统计学建模是本书的特色，论述的比较全面。特别是基于沉积过程的建模，在国内应该属于首次，市场上还没有这方面的书，是本书最大的卖点。本书各章题目简单介绍如下：</p>
+<p>全书共十二章，共369页，各章题目如下：</p>
+<p>第一章　地质建模流程与数据类型（１）</p>
+<p>第二章　构造地层格架建模方法（１８）</p>
+<p>第三章　相建模方法法（３０）</p>
+<p>第四章　属性建模方法（８０）</p>
+<p>第五章　裂缝性油藏建模方法（１０１）</p>
+<p>第六章　多点地质统计建模（１３４）</p>
+<p>第七章　基于沉积模拟的建模方法（１５６）</p>
+<p>第八章　地震在建模中的应用（２０３）</p>
+<p>第九章　地质模型粗化方法（２３４）</p>
+<p>第十章　基于历史拟合的地质模型优化（２５２）</p>
+<p>第十一章　地质模型不确定性分析（２６９）</p>
+<p>第十二章　油气藏地质建模实例（２８４）</p>
+<p>我负责其中的第七章《基于沉积过程模拟的建模方法》，是最近2年一直在做的研究方向。出版社先行出版了200本给我们，在网络电商平台上可以购买之前，有需要购买的可联系我。联系方式，关注微信公众号：AI_and_Petro，关注后发后台消息联系我，长期有效。</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/03/031519_1505_1.jpg" alt></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/油藏地质//" class="article-tag-list-link color5">油藏地质</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/15/e5-9c-b0-e8-b4-a8-e5-bb-ba-e6-a8-a1-e6-96-b0-e4-b9-a6-e5-87-ba-e7-89-88/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-picturebox-e7-94-bb-e6-8a-98-e7-ba-bf-c" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/13/picturebox-e7-94-bb-e6-8a-98-e7-ba-bf-c/">PictureBox 画折线 C#</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/13/picturebox-e7-94-bb-e6-8a-98-e7-ba-bf-c/" class="archive-article-date">
+  	<time datetime="2019-03-13T06:58:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>画折线 using System; using System.Collections.Generic; using System.ComponentModel; using System.Data; using System.Drawing; using System.Linq; using System.Text; using System.Threading.Tasks; using System.Windows.Forms;   namespace drawShape {     public partial class Form1 : Form     {         public Form1()         {             InitializeComponent();             bits = new Bitmap(pictureBox1.Width, pictureBox1.Height);             bitG = Graphics.FromImage(bits);             bitG.Clear(Color.White);             pictureBox1.Image = bits;         }           private bool mark = false;         private List<pointf> points = new List<pointf>();           private Bitmap bits;         private Graphics bitG;           private void pictureBox1_MouseDown(object sender, MouseEventArgs e)         {             if(Control.ModifierKeys == Keys.Control &amp;&amp; e.Button == MouseButtons.Left)             {                 PointF point = new PointF(e.X, e.Y);                 bitG.FillEllipse(Brushes.Black, e.X, e.Y, 4, 4);                 points.Add(point);                 if (mark == true)                 {                     bitG.DrawLines(Pens.Black, points.ToArray());                     pictureBox1.Image = bits;                 }                   mark = true;             }                          if(e.Button == MouseButtons.Right)             {                 mark = false;                 points = new List<pointf>();             }                     }           private void pictureBox1_MouseMove(object sender, MouseEventArgs e)         {             //if(e.Button == MouseButtons.Left &amp;&amp; mark)             //{             //    Graphics g = pictureBox1.CreateGraphics();             //    Pen pen1 = new Pen(Color.Black);             //    points.Add(new PointF(e.X, e.Y));             //    g.DrawLines(pen1, points.ToArray());             //    bitG.DrawLines(pen1, points.ToArray());               //}         }           private void pictureBox1_MouseUp(object sender, MouseEventArgs e)         {             //pictureBox1.Image = bits;             //if(mark == true)             //    mark = false;           }     } } <img src="http://afengwind.files.wordpress.com/2019/03/e794bbe68a98e7babf.png" alt></pointf></pointf></pointf></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">C#</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/软件开发//" class="article-tag-list-link color5">软件开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/13/picturebox-e7-94-bb-e6-8a-98-e7-ba-bf-c/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-e5-88-a9-e7-94-a8-e7-99-be-e5-ba-a6ocr-e5-bc-95-e6-93-8e-e6-8a-8a-e5-9b-be-e7-89-87-e6-a0-bc-e5-bc-8fpdf-e8-bd-actxt" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/04/e5-88-a9-e7-94-a8-e7-99-be-e5-ba-a6ocr-e5-bc-95-e6-93-8e-e6-8a-8a-e5-9b-be-e7-89-87-e6-a0-bc-e5-bc-8fpdf-e8-bd-actxt/">利用百度ocr引擎把图片格式pdf转txt</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/04/e5-88-a9-e7-94-a8-e7-99-be-e5-ba-a6ocr-e5-bc-95-e6-93-8e-e6-8a-8a-e5-9b-be-e7-89-87-e6-a0-bc-e5-bc-8fpdf-e8-bd-actxt/" class="archive-article-date">
+  	<time datetime="2019-03-04T06:55:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>经常情况是下载到的文件是pdf格式，比如各种比较旧的文献，而且是图片格式的pdf，上面的文字无法编辑。尽管有开源的文字识别引擎，tesseract，但是经过测试效果不好，而很多效果好的pdf转word或txt的软件都是收费的，比如abbyy，迅捷pdf转化等，而且价格不菲。因此，最近几天通过C#语言编写了一个可以把扫描版或图片版的pdf文件转化txt的小软件，它调用了百度的文字识别引擎，也就是百度文字的识别能力多强，这款软件就有多强，而且实际应用表明，效果确实很好。</p>
+<p>分两个步骤，首先开源工具Ghostscript.net把pdf中的每页都转化为图片，然后调用百度的文本识别接口进行文字识别，把返回的最终的识别结果写入到txt文件。免费的百度文本识别每天限制5000页，基本够个人使用了。适合文字量大的扫描版或图片版pdf文件的转化。下面是实际效果和程序源代码。</p>
+<p><img src="https://afengwind.files.wordpress.com/2019/03/e799bee5baa6ocre8af86e588abe7bb93e69e9c1-1.png" alt></p>
+<p>原始图片</p>
+<p><img src="https://afengwind.files.wordpress.com/2019/03/e799bee5baa6ocre8af86e588abe7bb93e69e9c2.png?w=662" alt></p>
+<p>识别效果</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using Ghostscript.NET.Rasterizer;
+using System.IO;
+using Baidu.Aip.Ocr;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace pdfocr
+{
+    class Program
+    {
+        //// Output Folder
+        //static string outputFolder = &quot;D:\\PDFSplit\\Example\\outputImages\\&quot;;
+
+        [STAThread]
+        public static void Main(string[] args)
+        {
+            int choice = -1;
+            while(choice != 0)
+            {
+                Console.WriteLine(&quot;Input 1 to OpenPdfsToImage&quot;);
+                Console.WriteLine(&quot;Input 2 to ConvertImagesToTxt&quot;);
+                Console.WriteLine(&quot;Input 0 to Exit&quot;);
+                try
+                {
+                    choice = Convert.ToInt32(Console.ReadLine());
+                    if(choice == 1)
+                        OpenPdfsToImage();
+                    if(choice == 2)
+                        ConvertImagesToTxt();
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+
+            Console.Write(&quot;Press any key to continue . . . &quot;);
+            Console.ReadKey();
+        }
+
+        private static void ConvertImagesToTxt()
+        {
+            //Get all the PDF files in the specified location
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = &quot;JPG file|*.jpg|JPEG file|*.jpeg|BMP file|*.bmp|PNG file|*.png|ALL file|*.*&quot;;
+            openFile.FilterIndex = 1;
+            openFile.RestoreDirectory = true;
+            openFile.Multiselect = true;
+
+            if (openFile.ShowDialog() == DialogResult.OK)
+            {
+                var imageFiles = openFile.FileNames;
+                var directory = Path.GetDirectoryName(openFile.FileName);
+                StreamWriter sw = new StreamWriter(directory + &quot;\\output.txt&quot;);
+                for(int i=0;i&lt;imageFiles.Length;i++)
+                {
+                    var result = ConvertIamgeFormBaiduOCR(imageFiles[i]);
+
+                    JObject jo = (JObject)JsonConvert.DeserializeObject(result);
+
+                    int num = Convert.ToInt32(jo[&quot;words_result_num&quot;].ToString());
+                    JArray jo_words_result = (JArray) JsonConvert.DeserializeObject(jo[&quot;words_result&quot;].ToString());
+                    JObject jo_words;
+                    for (int j=0;j&lt;num;j++)
+                    {
+                        jo_words = (JObject)jo_words_result[j];
+                        sw.WriteLine(jo_words[&quot;words&quot;]); 
+                    }
+
+                }
+                sw.Close();
+            }
+        }
+
+
+
+
+        private static string ConvertIamgeFormBaiduOCR(string filePath)
+        {
+            //PDF2TXT
+            //APPID: 15678510
+            string API_KEY = &quot;*****************&quot;;
+            string SECRET_KEY = &quot;************************&quot;;
+            Ocr client = new Ocr(API_KEY, SECRET_KEY);
+            client.Timeout = 60000;
+
+            string convertedTxt = GeneralBasicDemo(client, filePath);
+            return convertedTxt;
+        }
+
+        /// &lt;summary&gt;
+        /// 本地图片识别
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;filename&quot;&gt;&lt;/param&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        public static string GeneralBasicDemo(Ocr client, string filename)
+        {
+            var image = File.ReadAllBytes(filename);
+            // 调用通用文字识别, 图片参数为本地图片，可能会抛出网络等异常，请使用try/catch捕获
+            var result = client.GeneralBasic(image);
+            Console.WriteLine(result);
+            // 如果有可选参数
+            var options = new Dictionary&lt;string, object&gt;{
+                    {&quot;language_type&quot;, &quot;CHN_ENG&quot;},
+                    {&quot;detect_direction&quot;, &quot;true&quot;},
+                    {&quot;detect_language&quot;, &quot;true&quot;},
+                    {&quot;probability&quot;, &quot;true&quot;}
+                };
+            // 带参数调用通用文字识别, 图片参数为本地图片
+            result = client.GeneralBasic(image, options);
+            return result.ToString();
+        }
+        /// &lt;summary&gt;
+        /// 联网图片识别
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;url&quot;&gt;&lt;/param&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        public string GeneralBasicUrlDemo(Ocr client, string url)
+        {
+            // 调用通用文字识别, 图片参数为远程url图片，可能会抛出网络等异常，请使用try/catch捕获
+            var result = client.GeneralBasicUrl(url);
+            Console.WriteLine(result);
+            // 如果有可选参数
+            var options = new Dictionary&lt;string, object&gt;{
+                    {&quot;language_type&quot;, &quot;CHN_ENG&quot;},
+                    {&quot;detect_direction&quot;, &quot;true&quot;},
+                    {&quot;detect_language&quot;, &quot;true&quot;},
+                    {&quot;probability&quot;, &quot;true&quot;}
+                };
+            // 带参数调用通用文字识别, 图片参数为远程url图片
+            result = client.GeneralBasicUrl(url, options);
+            return result.ToString();
+        }
+
+        private static void OpenPdfsToImage()
+        {
+            //Get all the PDF files in the specified location
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = &quot;PDF file|*.pdf|ALL file|*.*&quot;;
+            openFile.FilterIndex = 1;
+            openFile.RestoreDirectory = true;
+            openFile.Multiselect = true;
+
+            if (openFile.ShowDialog() == DialogResult.OK)
+            {
+                var pdfFiles = openFile.FileNames;
+                var outputFolder = ChooseOutputDirectory();
+                if (outputFolder == null) return;
+                //process each PDF file
+                foreach (var pdfFile in pdfFiles)
+                {
+                    var imageFileName = Path.GetFileNameWithoutExtension(pdfFile);
+                    List&lt;string&gt; imageFileNames = new List&lt;string&gt;();
+                    //PdfToPng(pdfFile, iamgeFileName);
+                    PdfToPng(pdfFile, imageFileNames, System.Drawing.Imaging.ImageFormat.Jpeg, &quot;.jpeg&quot;, outputFolder);
+                    //StreamWriter sw = new StreamWriter(outputFolder + imageFileName + &quot;_output.txt&quot;);
+                    //Image2Txt(imageFileNames, sw);
+                    //sw.Close();
+                }
+            }
+        }
+
+        private static  string ChooseOutputDirectory()
+        {
+            string folderPath = null;
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            folderBrowser.Description = &quot;Choose directory to save converted images&quot;;
+            if(folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                folderPath = folderBrowser.SelectedPath;
+
+                ////get the files in the folder
+                //DirectoryInfo theFolder = new DirectoryInfo(folderPath);
+                //FileInfo[] dirInfo = theFolder.GetFiles();
+                //foreach(FileInfo file in dirInfo)
+                //{
+                //    Console.WriteLine(file.ToString());
+                //}
+            }
+            return folderPath;
+        }
+
+        private static void PdfToPng(string inputFile, string outputFileName, string outputFolder)
+        {
+            var xDpi = 300; //set the x DPI
+            var yDpi = 300; //set the y DPI
+            //var pageNumber = 169; // the pages in a PDF document
+
+
+
+            using (var rasterizer = new GhostscriptRasterizer()) //create an instance for GhostscriptRasterizer
+            {
+                rasterizer.Open(inputFile); //opens the PDF file for rasterizing
+                for (int pageNumber=1;pageNumber&lt;= rasterizer.PageCount; pageNumber++)
+                {
+                    //set the output image(png&apos;s) complete path
+                    var outputPNGPath = Path.Combine(outputFolder, string.Format(&quot;{0}_{1}.png&quot;, outputFileName,pageNumber));
+                    //converts the PDF pages to png&apos;s 
+                    var pdf2PNG = rasterizer.GetPage(xDpi, yDpi, pageNumber);
+                    //save the png&apos;s
+                    pdf2PNG.Save(outputPNGPath, System.Drawing.Imaging.ImageFormat.Png);
+                    Console.WriteLine(&quot;Saved &quot; + outputPNGPath);
+
+                }
+
+
+            }
+        }
+
+        private static void PdfToPng(string inputFile, List&lt;string&gt;imageFileNames, System.Drawing.Imaging.ImageFormat imageFormat, string extension, string outputFolder)
+        {
+
+            var xDpi = 300; //set the x DPI
+            var yDpi = 300; //set the y DPI
+            //var pageNumber = 169; // the pages in a PDF document
+
+
+
+            using (var rasterizer = new GhostscriptRasterizer()) //create an instance for GhostscriptRasterizer
+            {
+                var fileName = Path.GetFileNameWithoutExtension(inputFile);
+                rasterizer.Open(inputFile); //opens the PDF file for rasterizing
+                for (int pageNumber = 1; pageNumber &lt;= rasterizer.PageCount; pageNumber++)
+                {
+                    //set the output image(png&apos;s) complete path
+                    string outputFileName = string.Format(&quot;{0}_{1}&quot; + extension, fileName, pageNumber);
+                    var outputPNGPath = Path.Combine(outputFolder, outputFileName);
+                    //converts the PDF pages to png&apos;s 
+                    var pdf2PNG = rasterizer.GetPage(xDpi, yDpi, pageNumber);
+                    //save the image&apos;s
+                    try
+                    {
+                        pdf2PNG.Save(outputPNGPath, imageFormat);
+                        Console.WriteLine(&quot;Saved &quot; + outputPNGPath);
+                        imageFileNames.Add(outputPNGPath);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.Message + &quot;page &quot; + pageNumber.ToString() + &quot; is not fail&quot;);
+                    }
+                }
+
+
+            }
+
+       }
+}
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PDF</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ocr</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/软件开发//" class="article-tag-list-link color5">软件开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/04/e5-88-a9-e7-94-a8-e7-99-be-e5-ba-a6ocr-e5-bc-95-e6-93-8e-e6-8a-8a-e5-9b-be-e7-89-87-e6-a0-bc-e5-bc-8fpdf-e8-bd-actxt/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-c-e8-af-ad-e8-a8-80-e8-b0-83-e7-94-a8c-e5-87-bd-e6-95-b0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/27/c-e8-af-ad-e8-a8-80-e8-b0-83-e7-94-a8c-e5-87-bd-e6-95-b0/">C语言调用C#函数</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/27/c-e8-af-ad-e8-a8-80-e8-b0-83-e7-94-a8c-e5-87-bd-e6-95-b0/" class="archive-article-date">
+  	<time datetime="2019-02-26T18:35:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>工作中需要用C#调用C的函数，而C的函数又要回调C#的函数，其中高级语言C#调用低级语言C的函数比较容易，而C调用C#的函数比较困难，网上给出了4中方式：</p>
+<ol>
+<li><p><strong>CLR Hosting API</strong>: Native VC++ module calls <a href="http://msdn.microsoft.com/en-us/magazine/cc163567.aspx" target="_blank" rel="noopener">CLR Hosting APIs</a> to host CLR, load and call the .NET assembly (sample code: <a href="https://code.msdn.microsoft.com/windowsdesktop/CppHostCLR-e6581ee0" target="_blank" rel="noopener">CppHostCLR</a>).  </p>
+</li>
+<li><p><strong>COM Interop</strong>: If the .NET assembly can be exposed as a COM component, native VC++ module can call into the .NET assembly through .NET – COM interop (sample code: <a href="https://code.msdn.microsoft.com/windowsdesktop/CppCOMClient-8eb832b1" target="_blank" rel="noopener">CppCOMClient</a>).  </p>
+</li>
+<li><p><strong>Reverse PInvoke</strong>: The managed code calls native code passing a delegate that the native code can call back (sample code: <a href="https://code.msdn.microsoft.com/windowsdesktop/CSPInvokeDll-b05779d0" target="_blank" rel="noopener">CSPInvokeDll</a>).  </p>
+</li>
+<li><p><strong>C++/CLI</strong>: If the module containing native VC++ code is allowed to <a href="http://msdn.microsoft.com/en-us/library/ms173265.aspx" target="_blank" rel="noopener">enable CLR</a>, the native VC++ code can call .NET assembly directly (sample code: <a href="https://code.msdn.microsoft.com/windowsdesktop/Consuming-C-Library-in-937458e5" target="_blank" rel="noopener">Consuming C# Library in native C or C++ using C++/CLI</a>)  </p>
+</li>
+</ol>
+<p>第一种方式通过clr宿主接口的方式调用C#函数。</p>
+<p>第二种方式是COM组建的方式，要求编译C#是生成COM可见的dll文件，可以给C/C++调用。</p>
+<p>第三种方式是反向回调的方式，托管代码调用非托管代码，同时传递给非托管代码一个委托，非托管代码通过这个委托调用托管代码的函数。特别适合这次的需求。</p>
+<p>第四种方式是托管式C++/CLI，它以托管式C++/CLI为桥梁，托管式C++调用C#的DLL，提供给非托管代码可以调用的函数接口，通过__declspec(dllexport)关键词。资料2给出了这种方式的例子，但是有些细节没有给出，这次测试验证了该方法可性，也把具体细节放上来。</p>
+<p>下面是第四种方式的具体步骤：</p>
+<p>步骤1：建立C# 工程，编译生成DLL文件，文件名为ManagedClass.dll。</p>
+<pre><code>// ManagedClass.cs
+
+// Any source code blocks look like this
+//
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
+using System.IO;
+
+namespace ManagedCSharp
+{
+    public static class ManagedClass
+    {
+        public static void ShowValue(ref int value)
+        {
+            DialogResult result = MessageBox.Show(&quot;C# Message Box&quot;,
+                    &quot;C# Message Box&quot;, MessageBoxButtons.OKCancel);
+
+            if (result == DialogResult.OK)
+                value = 1;
+            else
+                value = 2;
+            return;
+        }
+    }
+}
+</code></pre><p>步骤2：建立托管的C++/CLI工程，添加步骤1生成的DLL作为引用，并把要给非托管代码调用的函数以__declspec(dllexport)为关键词作为输出。生成ManagedCpp.dll,ManagedCpp.obj文件。  </p>
+<pre><code>//ManagedCpp.h
+#pragma once
+
+using namespace System;
+using namespace::Reflection;
+
+namespace ManagedCpp {
+    public ref class DoWork
+    {
+        // TODO: Add your methods for this class here.
+        public:void ShowCSharpMessageBox(int *value)
+        {
+            ManagedCSharp::ManagedClass::ShowValue(*value);
+            return;
+        }
+    };
+}
+__declspec(dllexport) void ShowMessageBox(int *value)
+{
+    ManagedCpp::DoWork work;
+    work.ShowCSharpMessageBox(value);
+}
+</code></pre><p>步骤3：建立非托管的C语言工程，并设置Include directories，Library directories和Additional Dependencies，编译生成testApp.exe。</p>
+<p>具体设置方法如下 ：</p>
+<p>（1）添加空的项目，新建TestApp.cpp文件，</p>
+<p>（2）项目-&gt;属性-&gt;配置属性-&gt;VC++ 目录-&gt; 在”包含目录”里添加头文件ManagedCpp.h所在的目录</p>
+<p>（3）项目-&gt;属性-&gt;配置属性-&gt;VC++ 目录-&gt; 在”库目录”里添加头文件ManagedCpp.lib所在的目录</p>
+<p>（4）项目-&gt;属性-&gt;配置属性-&gt;链接器-&gt;输入-&gt; 在”附加依赖项”里添加”ManagedCpp.lib”（若有多个 lib 则以空格隔开）</p>
+<p>testApp.cpp的代码如下：</p>
+<pre><code>//#include &quot;stdafx.h&quot;
+#include &quot;conio.h&quot;
+#include &lt;iostream&gt;
+#include &lt;windows.h&gt;
+#include &lt;tchar.h&gt;
+
+
+_declspec(dllexport) void ShowMessageBox(int *value);
+
+
+int _tmain()
+{
+    int nResult = 0;
+    int *result = &amp;nResult;
+
+    ShowMessageBox(result);
+
+    if (*result == 1)
+        printf(&quot;Ok Was Pressed \n&quot;);
+    else
+        if (*result == 2)
+            printf(&quot;Cancel Was Pressed \n&quot;);
+        else
+            printf(&quot;Unknown result \n&quot;);
+
+    system(&quot;pause&quot;);
+
+    return 0;
+}
+</code></pre><p>运行结果如下</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/02/022719_0235_cc1.png" alt></p>
+<p><img src="http://afengwind.files.wordpress.com/2019/02/022719_0235_cc2.png" alt></p>
+<p>下面将介绍方法2，即反向回调的方式。</p>
+<p>C语言反向回调C#（PInvoke）在codepreject上已经很好的例子（资料4），这个例子在cnblogs上也有翻译的中文版（资料5）。经过测试发现有个问题，提示错误如下：</p>
+<p>“Managed Debugging Assistant ‘PInvokeStackImbalance’</p>
+<p>  Message=Managed Debugging Assistant ‘PInvokeStackImbalance’ : ‘A call to PInvoke function ‘PInverse!Program::DoWork’ has unbalanced the stack. This is likely because the managed PInvoke signature does not match the unmanaged target signature. Check that the calling convention and parameters of the PInvoke signature match the target unmanaged signature.’”</p>
+<p>意思是函数委托的签名和在C语言中的函数签名格式不一致，但是经过反复检查，委托的签名和C语言中非托管函数的签名是一致的。</p>
+<p>资料4和资料5中的非托管dll的函数引入方式是，在C#工程中的标明，[DllImport(“Engine.dll”)]，根据资料6修改了格式，写成[DllImport(“Engine.dll”, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]就没问题了，即表名了调用非托管函数的具体类型，重新编译就没有提示错误了。具体代码如下。</p>
+<p>C语言工程名为Engine，生成的dll文件为Engine.dll，其中Main.h内容如下：</p>
+<pre><code>#pragma once
+#include &lt;Windows.h&gt;
+
+#ifdef  __cplusplus
+extern &quot;C&quot;
+{
+#endif
+#define DLL __declspec(dllexport)
+    typedef void(_stdcall * ProgressCallback)(int);
+    typedef char* (_stdcall * GetFilePathCallback)(char *filter);
+
+    DLL void DoWork(ProgressCallback processCallback);
+    DLL void ProcessFile(GetFilePathCallback getPath);
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+</code></pre><p>Main.c的内容如下：</p>
+<pre><code>#include &quot;Main.h&quot;
+#include &lt;stdio.h&gt;
+
+DLL void DoWork(ProgressCallback progressCallback)
+{
+    int counter = 0;
+
+    for (; counter &lt;= 100; counter++)
+    {
+        // do the work...
+
+        if (progressCallback)
+        {
+            // send progress update
+            progressCallback(counter);
+        }
+    }
+}
+
+DLL void ProcessFile(GetFilePathCallback getPath)
+{
+
+    if (getPath)
+    {
+        // get file path...
+        char* path = getPath(&quot;Text Files|*.txt&quot;);
+        // open the file for reading
+        FILE *file = fopen(path, &quot;r&quot;);
+        // read buffer
+        char line[1024];
+
+        // print file info to the screen
+        printf(&quot;File path: %s\n&quot;, path ? path : &quot;N/A&quot;);
+        printf(&quot;File content:\n&quot;);
+
+        while (fgets(line, 1024, file) != NULL)
+        {
+            printf(&quot;%s&quot;, line);
+        }
+
+        // close the file
+        fclose(file);
+    }
+}
+</code></pre><p>C#的工程名称为PInverse，生成的文件为PInverse.exe，需要把Engine.dll文件拷贝到工程目录下。C#工程的代码如下：</p>
+<pre><code>using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
+class Program
+{
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    delegate void ProgressCallback(int value);
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    delegate string GetFilePathCallback(string filter);
+
+
+    //[DllImport(&quot;Engine.dll&quot;)]
+    [DllImport(&quot;Engine.dll&quot;, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+    static extern void DoWork([MarshalAs(UnmanagedType.FunctionPtr)] ProgressCallback callbackPointer);
+
+    [DllImport(&quot;Engine.dll&quot;, CharSet = CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)]
+    static extern void ProcessFile([MarshalAs(UnmanagedType.FunctionPtr)] GetFilePathCallback callbackPointer);
+
+
+    [STAThread]
+    static void Main(string[] args)
+    {
+        // define a progress callback delegate
+        ProgressCallback callback =
+            (int value) =&gt;
+            {
+                Console.WriteLine(&quot;Progress = {0}&quot;, value);
+            };
+
+        Console.WriteLine(&quot;Press any key to run DoWork....&quot;);
+        Console.ReadKey(true);
+        // call DoWork in C code
+        DoWork(callback);
+
+        Console.WriteLine();
+        Console.WriteLine(&quot;Press any key to run ProcessFile....&quot;);
+        Console.ReadKey(true);
+
+        // define a get file path callback delegate
+        GetFilePathCallback getPath =
+            (filter) =&gt;
+            {
+                string path = default(string);
+
+                OpenFileDialog ofd =
+                    new OpenFileDialog()
+                    {
+                        Filter = filter
+                    };
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    path = ofd.FileName;
+                }
+
+                return path;
+            };
+
+        // call ProcessFile in C code
+        ProcessFile(getPath);
+        Console.ReadKey(true);
+    }
+
+}
+</code></pre><p>最后的运行结果如下，满足了要求，后续还需要研究回调函数中有数组时的方法。</p>
+<p><img src="https://afengwind.files.wordpress.com/2019/02/pinvoke1.png" alt></p>
+<p><img src="https://afengwind.files.wordpress.com/2019/02/pinvoke2.png" alt></p>
+<p>参考资料</p>
+<p>（1）<a href="https://stackoverflow.com/questions/4428267/calling-c-sharp-from-c" target="_blank" rel="noopener">https://stackoverflow.com/questions/4428267/calling-c-sharp-from-c</a></p>
+<p>（2）<a href="https://www.codeproject.com/Tips/695387/Calling-Csharp-NET-methods-from-unmanaged-C-Cplusp" target="_blank" rel="noopener">https://www.codeproject.com/Tips/695387/Calling-Csharp-NET-methods-from-unmanaged-C-Cplusp</a></p>
+<p>（3）<a href="https://www.cnblogs.com/woshitianma/p/3681745.html" target="_blank" rel="noopener">https://www.cnblogs.com/woshitianma/p/3681745.html</a></p>
+<p>（4）<a href="https://www.codeproject.com/Tips/318140/How-to-make-a-callback-to-Csharp-from-C-Cplusplus" target="_blank" rel="noopener">https://www.codeproject.com/Tips/318140/How-to-make-a-callback-to-Csharp-from-C-Cplusplus</a></p>
+<p>（5）<a href="https://www.cnblogs.com/passedbylove/p/6082220.html?_t=t" target="_blank" rel="noopener">https://www.cnblogs.com/passedbylove/p/6082220.html?_t=t</a></p>
+<p>（6）<a href="https://stackoverflow.com/questions/7970128/passing-a-c-sharp-callback-function-through-interop-pinvoke" target="_blank" rel="noopener">https://stackoverflow.com/questions/7970128/passing-a-c-sharp-callback-function-through-interop-pinvoke</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">C#</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">C</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/软件开发//" class="article-tag-list-link color5">软件开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/27/c-e8-af-ad-e8-a8-80-e8-b0-83-e7-94-a8c-e5-87-bd-e6-95-b0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vtk-e7-bb-98-e5-88-b6-e4-b8-89-e7-bb-b4-e7-bd-91-e6-a0-bc" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/25/vtk-e7-bb-98-e5-88-b6-e4-b8-89-e7-bb-b4-e7-bd-91-e6-a0-bc/">vtk绘制三维网格</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/25/vtk-e7-bb-98-e5-88-b6-e4-b8-89-e7-bb-b4-e7-bd-91-e6-a0-bc/" class="archive-article-date">
+  	<time datetime="2019-02-25T06:49:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>基于vtk中的 vtkHexahedron网格，绘制空间上8个顶点组成的网格的三维模型，这里只放了规则模型的框架图和颜色，可以用于显示eclipse grid格式的油藏地质三维模型。</p>
+<pre><code>public static void DrawCoordXYZGrid(Point3D[,,] coordXYZGrid, ref RenderWindowControl myRenderWindowControl)
+        {
+            int node_ni = coordXYZGrid.GetLength(0);
+            int node_nj = coordXYZGrid.GetLength(1);
+            int node_nk = coordXYZGrid.GetLength(2);
+
+            vtkPoints points = vtkPoints.New();
+            vtkFloatArray scalars = vtkFloatArray.New();          
+
+            points.SetNumberOfPoints(node_ni * node_nj * node_nk);
+            int seq = 0;
+            for (int k = 0; k &lt; node_nk; k++)
+                for (int j = 0; j &lt; node_nj; j++)
+                    for (int i = 0; i &lt; node_ni; i++)
+                    {
+                        points.InsertPoint(seq, coordXYZGrid[i, j, k].X, coordXYZGrid[i, j, k].Y, coordXYZGrid[i, j, k].Z);
+                        scalars.InsertTuple1(seq, k);
+                        //Console.WriteLine(“{0} {1} {2}”, coordXYZGrid[i, j, k].x, coordXYZGrid[i, j, k].y, coordXYZGrid[i, j, k].z);
+                        seq += 1;
+                    }
+
+            vtkHexahedron hexahedron;
+            vtkUnstructuredGrid coordXYZUG = vtkUnstructuredGrid.New();
+            coordXYZUG.Allocate(1, 1);
+            coordXYZUG.SetPoints(points);
+            coordXYZUG.GetPointData().SetScalars(scalars);
+            seq = 0;
+            for (int k = 0; k &lt; node_nk -1; k++)
+                for (int j = 0; j &lt; node_nj - 1; j++)
+                    for (int i = 0; i &lt; node_ni - 1; i++)
+                    {
+                        seq = k * node_nj * node_ni + j * node_ni + i;
+                        hexahedron = vtkHexahedron.New();
+                        hexahedron.GetPointIds().SetId(0, seq);
+                        hexahedron.GetPointIds().SetId(1, seq + 1);
+                        hexahedron.GetPointIds().SetId(2, seq + node_ni + 1);
+                        hexahedron.GetPointIds().SetId(3, seq + node_ni);
+                        hexahedron.GetPointIds().SetId(4, seq + node_nj * node_ni);
+                        hexahedron.GetPointIds().SetId(5, seq + node_nj * node_ni + 1);
+                        hexahedron.GetPointIds().SetId(6, seq + node_nj * node_ni + node_ni + 1);
+                        hexahedron.GetPointIds().SetId(7, seq + node_nj * node_ni + node_ni);
+                        coordXYZUG.InsertNextCell(hexahedron.GetCellType(), hexahedron.GetPointIds());
+                    }
+
+            vtkDataSetMapper aHexahedronMapper = vtkDataSetMapper.New();
+            aHexahedronMapper.SetInputData(coordXYZUG);
+            aHexahedronMapper.SetScalarRange(0, node_nk);
+
+            vtkActor aHexahedronActor = vtkActor.New();
+            aHexahedronActor.SetMapper(aHexahedronMapper);
+            aHexahedronActor.GetProperty().SetDiffuseColor(1, 1, 0);
+
+            vtkRenderer render = vtkRenderer.New();
+            vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;
+
+            renWin.AddRenderer(render);
+            render.SetBackground(0, 0, 1);
+            render.AddActor(aHexahedronActor);
+        }
+</code></pre><p><img src="https://afengwind.files.wordpress.com/2019/02/eclipsegrid.jpg" alt></p>
+<p><img src="https://afengwind.files.wordpress.com/2019/02/eclipsegrid2.jpg" alt></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">3D</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">activiz</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vtk</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/软件开发//" class="article-tag-list-link color5">软件开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/25/vtk-e7-bb-98-e5-88-b6-e4-b8-89-e7-bb-b4-e7-bd-91-e6-a0-bc/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vtk-e4-b8-89-e7-bb-b4-e5-8f-af-e8-a7-86-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b03" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/25/vtk-e4-b8-89-e7-bb-b4-e5-8f-af-e8-a7-86-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b03/">Vtk三维可视化学习笔记3</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/25/vtk-e4-b8-89-e7-bb-b4-e5-8f-af-e8-a7-86-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b03/" class="archive-article-date">
+  	<time datetime="2019-02-25T00:59:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>2、读取源对象  Vtk内置了有限的建模能力，但是如果相编辑和操作复杂模型，往往需要阅读器（reader）作为数据的接口，另一种方式是导入器（Importer），它的功能使导入整个场景。该示例读取了stereo-lithography文件（后缀.stl），用二进制stl文件文件格式表示的多边形数据。比如从网站<a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">http://www.3dhoo.com/model/gongyesheji/34026.html读取锚钩并显示。</a> 其中用到了vtkLODActor（Level-Of-Detail Actor）演员，它能为了维持交互能性改变表示，它默认的行为是生成点云（point cloud）、框架（wireframe）、边界盒子（bounding-box）进而表示中间层和地层的表示。  2.1//读取stl文件并显示  private void ReadStlFileDraw() { vtkSTLReader stlReader = vtkSTLReader.New(); stlReader.SetFileName(@”..\..\data\anchor_hook.stl”); vtkPolyDataMapper stlMapper = vtkPolyDataMapper.New(); stlMapper.SetInputConnection(stlReader.GetOutputPort()); vtkLODActor stlActor = vtkLODActor.New(); stlActor.SetMapper(stlMapper); //stlActor.GetProperty().SetColor((float)Color.Orange.R/256, (float)Color.Orange.G / 256,(float)Color.Orange.B / 256); //设置actor的颜色 vtkRenderer stlRender = vtkRenderer.New(); vtkRenderWindow renWin = renderWindowControl1.RenderWindow; renWin.AddRenderer(stlRender); stlRender.AddActor(stlActor); stlRender.SetBackground(1.0, 1.0, 1.0); }  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk31.png" alt> <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk32.png" alt>  2.2//贴图到平面  private void DrawTexturePlane()  {   //load in the texture map   vtkBMPReader bmpReader = vtkBMPReader.New();   bmpReader.SetFileName(@”..\..\Data\masonry.bmp”);   vtkTexture atext = vtkTexture.New();   atext.SetInputConnection(bmpReader.GetOutputPort());   atext.InterpolateOn();   //create a plane source and actor   vtkPlaneSource plane = vtkPlaneSource.New();   plane.SetPoint1(0, 0, 0);   vtkPolyDataMapper planeMapper = vtkPolyDataMapper.New();   planeMapper.SetInputConnection(plane.GetOutputPort());   vtkActor planeActor = vtkActor.New();   planeActor.SetMapper(planeMapper);   planeActor.SetTexture(atext);   vtkRenderer renderer = vtkRenderer.New();   vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;   renWin.AddRenderer(renderer);   renderer.AddActor(planeActor);  }  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk33.png" alt>  2.3//画变量渲染颜色图  private void DrawRainBow()  {   //# First create pipeline a simple pipeline that reads a structure grid   //# and then extracts a plane from the grid. The plane will be colored   //# differently by using different lookup tables.   //#   //# Note: the Update method is manually invoked because it causes the   //# reader to read; later on we use the output of the reader to set   //# a range for the scalar values.   vtkMultiBlockPLOT3DReader pl3d = vtkMultiBlockPLOT3DReader.New();   pl3d.SetXYZFileName(@”..\..\Data\combxyz.bin”);   pl3d.SetQFileName(@”..\..\Data\combq.bin”);   pl3d.SetScalarFunctionNumber(100);   pl3d.SetVectorFunctionNumber(202);   pl3d.Update();   vtkDataObject pl3d_output = pl3d.GetOutput().GetBlock(0);   vtkStructuredGridGeometryFilter planeFilter = vtkStructuredGridGeometryFilter.New();   planeFilter.SetInputData(pl3d_output);   planeFilter.SetExtent(1, 100, 1, 100, 7, 7);   vtkLookupTable lut = vtkLookupTable.New();   vtkPolyDataMapper planeMapper = vtkPolyDataMapper.New();   planeMapper.SetLookupTable(lut);   planeMapper.SetInputConnection(planeFilter.GetOutputPort());   //planeMapper.SetScalarRange(pl3d_output.)   vtkActor planeActor = vtkActor.New();   planeActor.SetMapper(planeMapper);   //this creates an outline around the data    vtkStructuredGridOutlineFilter outlineFilter = vtkStructuredGridOutlineFilter.New();   outlineFilter.SetInputData(pl3d_output);   vtkPolyDataMapper outlineMapper = vtkPolyDataMapper.New();   outlineMapper.SetInputConnection(outlineFilter.GetOutputPort());   vtkActor outlineActor = vtkActor.New();   outlineActor.SetMapper(outlineMapper);   //Much of the following is commented out. To try different lookup tables.   //This create a black to white lut   //lut.SetHueRange(0, 0);   //lut.SetSaturationRange(0, 0);   //lut.SetValueRange(0.2, 1.0);   //This creates a red to blue lut   //lut.SetHueRange(0.0, 0.677);   //This creates a blue to red lue   lut.SetHueRange(0.667, 0.0);   //This creates a weird effect. the Build() method cause lookup   //table to allocate memory and create a table based on the correct   //hue, saturatioin, value, and alpha range. Here we then   //manully overwrite the value generated by the Build() method.   lut.SetNumberOfColors(256);   lut.Build();   for(int i=0;i&lt;16;i++)   {   lut.SetTableValue(i <em> 16, (float)Color.Red.R / 256, (float)Color.Red.G / 256, (float)Color.Red.B / 256, 1);   lut.SetTableValue(i </em> 16+1, (float)Color.Green.R / 256, (float)Color.Green.G / 256, (float)Color.Green.B / 256, 1);   lut.SetTableValue(i <em> 16+2, (float)Color.Blue.R / 256, (float)Color.Blue.G / 256, (float)Color.Blue.B / 256, 1);   lut.SetTableValue(i </em> 16+3, (float)Color.Black.R / 256, (float)Color.Black.G / 256, (float)Color.Black.B / 256, 1);   }   //Create the renderwindow, the render and both actors   vtkRenderer ren = vtkRenderer.New();   vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;   renWin.AddRenderer(ren);   //Add the actors to the renderer, set the backgroud   ren.AddActor(outlineActor);   ren.AddActor(planeActor);   ren.SetBackground(0.1, 0.2, 0.4);   ren.TwoSidedLightingOff();  }  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk34.png" alt>  3、vtk交互  vtkRenderWindowInteractor是vtk内置的界面交互类，是简单的方法，除此之外也可以通过事件绑定组作自己的交互器。Picking则鼠标在  平面上对数据选取时非常有用。  vtkRenderWindowInteractor是进行交互的最简单方法，该类型预先定义了一些事件与行为，提供了默认行为。它允许控制相机、演员，并提供了两种交互模式：位置敏感（joystick mode）和移动敏感（trackball mode）。提供了键盘j（joystick模式）、t（trackball模式），c（camera敏感）、a（演员敏感），左键（旋转），右键（移动，shift+左键），中健（缩放）、e（退出应用）、q（退出应用），f（飞行模式，长按f飞鼠标位置）、p（拾取模式），r（恢复默认视角）、s（显示面）、u（调用用户定义方法）、w（显示框架）几种操作的事件。  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk35.gif" alt>  三、可视化技术  </p>
+<p>可视化管线中的算法类，也即过滤器（filter）是根据所能处理的数据进行组织的，因此学习可视化管线技术的关键是理解各类数据类型。有些过滤器能作用在任意类型的数据上，即这些过滤器以vktDataSet类型数据（或它的子类）作为输入，这么说是因为vtkDataSet代表了所有离散类型的可视化数据。也有一些过滤器只能接受特定的数据类型，比如vtkPolyData，也有一些过滤器只能接受图像数据（vtkImageData）作为输入。</p>
+<p>需要记住的是：首先，过滤器可以产生多种类型的输出，输出的类型和输入的类型可以不相同；其次，过滤器用于组合产生负责的数据处理管线，通常有一定的使用模式或过滤器组合方式。</p>
+<p>1、可视化数据集（vtkDataSet）  数据集（vtkDataSet）是所有离散类型的可视化数据的父类，vtk中的数据集包括如下几种，有vtkPolyData，vtkImageData，vtkRectilinearGrid，vtkStructuredGrid， vtkUnstructuredGrid。所有可以接受vtkDataSet的过滤器也可以接受它的子类。  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk36.png" alt>  数据属性是依赖于数据集的信息。在vtk中属性数据可以依赖于点（point attribute data），也可以依赖于拓扑结构（cell attribute data）。依赖于数据集结构的属性数据可以被很多过滤器处理，并产生新的结构和属性。表示数据属性的类是vtkDataArray，可以标记为标量、向量、张量、法向量、纹理坐标、全局ids（用于确定冗余元素redundant element），有来源的ids（pedigree用于跟踪管线中的元素）。  数据集的点points和拓扑结构cells有他们各自独立的数据属性，数据属性可以依赖于数据集的点或拓扑结构，与vtkDataSet关联的所有数据属性都是vtkDataArray的子类，比如vtkFloatArray，vtkDoubleArray或vtkIntArray，数据矩阵（data array）可以视作具有本地属性名字的连续的、线性的内存块，在这个线性内存块中，数据向量可以认为有子向量或元组组成。生成属性数据意味着实例化一种数据类型的数组，通过给定元组的大小、插入数据，并把它与数据集相关联。  2、  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk37.png" alt><img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk38.png" alt>  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk39.png" alt><img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk310.png" alt>  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk311.png" alt><img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk312.png" alt>  2、单元类型cellTpye，也称拓扑结构  包括线性单元类型和非线性单元类型，共有74种。  typedef enum {   // Linear cells   VTK_EMPTY_CELL = 0,   VTK_VERTEX = 1,   VTK_POLY_VERTEX = 2,   VTK_LINE = 3,   VTK_POLY_LINE = 4,   VTK_TRIANGLE = 5,   VTK_TRIANGLE_STRIP = 6,   VTK_POLYGON = 7,   VTK_PIXEL = 8,   VTK_QUAD = 9,   VTK_TETRA = 10,   VTK_VOXEL = 11,   VTK_HEXAHEDRON = 12,   VTK_WEDGE = 13,   VTK_PYRAMID = 14,   VTK_PENTAGONAL_PRISM = 15,   VTK_HEXAGONAL_PRISM = 16,   // Quadratic, isoparametric cells   VTK_QUADRATIC_EDGE = 21,   VTK_QUADRATIC_TRIANGLE = 22,   VTK_QUADRATIC_QUAD = 23,   VTK_QUADRATIC_POLYGON = 36,   VTK_QUADRATIC_TETRA = 24,   VTK_QUADRATIC_HEXAHEDRON = 25,   VTK_QUADRATIC_WEDGE = 26,   VTK_QUADRATIC_PYRAMID = 27,   VTK_BIQUADRATIC_QUAD = 28,   VTK_TRIQUADRATIC_HEXAHEDRON = 29,   VTK_QUADRATIC_LINEAR_QUAD = 30,   VTK_QUADRATIC_LINEAR_WEDGE = 31,   VTK_BIQUADRATIC_QUADRATIC_WEDGE = 32,   VTK_BIQUADRATIC_QUADRATIC_HEXAHEDRON = 33,   VTK_BIQUADRATIC_TRIANGLE = 34,   // Cubic, isoparametric cell   VTK_CUBIC_LINE = 35,   // Special class of cells formed by convex group of points   VTK_CONVEX_POINT_SET = 41,   // Polyhedron cell (consisting of polygonal faces)   VTK_POLYHEDRON = 42,   // Higher order cells in parametric form   VTK_PARAMETRIC_CURVE = 51,   VTK_PARAMETRIC_SURFACE = 52,   VTK_PARAMETRIC_TRI_SURFACE = 53,   VTK_PARAMETRIC_QUAD_SURFACE = 54,   VTK_PARAMETRIC_TETRA_REGION = 55,   VTK_PARAMETRIC_HEX_REGION = 56,   // Higher order cells   VTK_HIGHER_ORDER_EDGE = 60,   VTK_HIGHER_ORDER_TRIANGLE = 61,   VTK_HIGHER_ORDER_QUAD = 62,   VTK_HIGHER_ORDER_POLYGON = 63,   VTK_HIGHER_ORDER_TETRAHEDRON = 64,   VTK_HIGHER_ORDER_WEDGE = 65,   VTK_HIGHER_ORDER_PYRAMID = 66,   VTK_HIGHER_ORDER_HEXAHEDRON = 67,   // Arbitrary order Lagrange elements (formulated separated from generic higher order   VTK_LAGRANGE_CURVE = 68,   VTK_LAGRANGE_TRIANGLE = 69,   VTK_LAGRANGE_QUADRILATERAL = 70,   VTK_LAGRANGE_TETRAHEDRON = 71,   VTK_LAGRANGE_HEXAHEDRON = 72,   VTK_LAGRANGE_WEDGE = 73,   VTK_LAGRANGE_PYRAMID = 74,   VTK_NUMBER_OF_CELL_TYPES  } VTKCellType;  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk313.png" alt>  <img src="http://afengwind.files.wordpress.com/2019/02/022519_0859_vtk314.png" alt></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/软件开发//" class="article-tag-list-link color5">软件开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/25/vtk-e4-b8-89-e7-bb-b4-e5-8f-af-e8-a7-86-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b03/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vtk-e4-b8-89-e7-bb-b4-e5-8f-af-e8-a7-86-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/25/vtk-e4-b8-89-e7-bb-b4-e5-8f-af-e8-a7-86-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b02/">Vtk三维可视化学习笔记2</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/25/vtk-e4-b8-89-e7-bb-b4-e5-8f-af-e8-a7-86-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b02/" class="archive-article-date">
+  	<time datetime="2019-02-25T00:57:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、vtk基本架构</p>
+<p>Vtk是基于对象的系统，高效使用vtk的关键是深入理解使用的对象模型。这样做可以避免对系统种上百种种对象的错误理解。有了对对象模型的准确理解，将很容易对这些对象进行组合编写自己的应用程序。也需要知道系统中很多对象的能力（特性和方法），要知道这个必须看很多代码示例和在线文档。</p>
+<p>Vtk系统两种主要的组成是可视化管线和渲染管线。可视化管线用于获取和产生数据、处理数据、把数据写入文件或传递给渲染引擎用于显示。渲染引擎负责生成数据的可视化表示。</p>
+<p>1、渲染引擎</p>
+<p>渲染引擎由负责处理可视化引擎的结果并在窗口上显示的类组成。常用主要包括下面的：vtkPop，vtkAbstractMapper, vtkPropery和vtkVolumeProperty， vtkCamera， vtkLight， vtkRenderer， vtkRenderWindow,vtkRenderWindowInteractor, vtkTransform,vtkLookupTable, vtkColorTransferFunction和vtkPiecewiseFunction等。</p>
+<p>场景中存在的数据的可见描述是vtkPop的子类，最常见的子类是用与展示3D对象的vtkActor（用于表示场景中数据的几何特征）和vtkVolume（用于表示场景中的体数据）。也有用于表示2D场中数据的vtkActor2D。vtkPop子类的通用职责是知道自己在场景中的位置、大小、方向。除了对位置的控制，它通常有个投影对象（mapper object）知道如何渲染（render），另外属性对象（property object）控制的参数有颜色和透明度等。</p>
+<p>有超过50多种特定的props，比如vtkImageActor（用于展示image）和vtkPieChartActor(用于生成数组数据的饼状图表示)。一些特殊的props直接包括控制外观的参数，或者直接带有要渲染的输入数据的引用，因此这些props不需要设置属性对象（propery object）或投影对象（mapper object）。比如，vtkFollower是一种特殊的vtkActor子类，它能自动更新自己的方向，使得始终面向相机，很适用于在3D空间展示面板和文字。</p>
+<p>2、可视化引擎</p>
+<p>可视化引擎用于读取或生成数据、分析和处理数据、把数据写道文件或传递给渲染引擎进行显示。比如，可以从磁盘读取3D体数据，可以对它进行处理生成一组三角形表示数据体内的等值面，然后把这个几何数据写回磁盘，或者生成一组球体或圆柱体表示原子和棍子，把它们传递给渲染引擎用于显示。</p>
+<p>Vtk利用数据流的方法把信息转化为图形数据，在这个过程中有两类基本的对象，分别是vtkDataObject和vtkAlgorithm。</p>
+<p>数据对象vtkDataObject表示各类数据。vtkDataObject类通常被视作通用的”blob”数据。有正式结构的数据被称作数据集（vtkDataSet），数据集包括几何数据和拓扑结构（points 和cells），它也有相关的属性数据，包括标量和向量，属性数据可以依附于数据集的几何数据（points）和拓扑结构（cells）。拓扑结构Cells是几何数据点Points的拓扑组织，拓扑结构cells组成了数据集的原子（atoms）用于几何结构点（points）之间的信息插值。Vtk内支持的cell类型有74种，包括线性拓扑结构和非线性拓扑结构。</p>
+<p>算法vtkAlgorithm，通常也称为过滤器（filter），用于操作数据对象并产生新大数据对象。算法和数据对象相互连接形成了可视化管线，也成为数据流网络。源算法（Source Algorithm）通过读取（reader objects）或构建（procedural source object）一个或多个数据对象，过滤器（filter）接收一个或多个数据对象并产生一个或多个输出对象。投射器Mapper（一些情况下，是特定的actor）获取filter处理后的数据把它转化一种可视化表示，然后再渲染引擎中显示。写出器（writer）可以理解为一种特殊的映射器（mapper），它把数据传递到文件或数据流。</p>
+<p>图像处理（Image Processing）.vtk支持大量的图像处理和三维渲染方法。在vtk中2D和3D图像数据（image）都被视作vtkImageData。在vtk中图像数据集（iamge dataset）是一种数据按照规则的、沿着坐标轴排列的矩阵。图像（Image）、像素图（pixmaps）和位图（bitmaps）是2D 图像数据集的例子，体数据（一组2D图像）时3D图像数据，比如三维地震数据。</p>
+<p>图像处理的管线通常输入和输出图像数据集。因为数据的规则和简单特性，图像处理管线有一些其它的重要特性。体渲染（Volume Rendering）用于3D vktImageData的可视化，特殊的图像查看器可以查看2D vtkImageData。几乎所有的图像处理管线都是多线程的，可以按照用户给定的内存限制以数据片的形式处理数据。图像处理管线的过滤器能自动感知电脑的核数自动把数据分片利用多线程方式进行读取（vtkStreamingDemandDrivenPipline）。</p>
+<p>对象众多，通过示例学习不同对象的特性和方法是很好的方法，如果直接看类的继承关系，很枯燥，而且理解。通过示例学习是必不可少的方法。</p>
+<p>二、示例学习</p>
+<p>1、生成简单模型</p>
+<p>利用vtk的典型流程是：读取或生成一些数据，过滤（filter）它，渲染（render）它，然后与它交互。</p>
+<p>有两种基本的获取数据的方式。这些数据可能是存在文件中，需要读入vtk系统，数据也可能有一些方法生成（通过算法或数学表达）。获取数据用于渲染管线初始化的过程称作源对象（source object），用于生成数据的源对象称为过程对象（procedural object），用于读取数据的对象称为读取器对象（reader object）。</p>
+<p>比如vtkCylinderSource源对象，用于生成圆柱的多边形表示，它的输出是圆柱（cylinder）,可以作为多边形数据映射器的输入。比如vtkSphereSource源对象，用于生成球面的多边形表示，它的输出是球(sphere)，可以作为多边形映射器的输入，在输入之前可以进行收缩操作vtkShrinkPolyData，收缩后可以看见球面的三角形表示。</p>
+<p>1.1//画点</p>
+<p>private void DrawPoint()</p>
+<p>{</p>
+<p>// Create the geometry of the points (the coordinate)</p>
+<p>vtkPoints points = vtkPoints.New();</p>
+<p>double[,] p = new double[,]</p>
+<p>{</p>
+<p>{1.0, 2.0, 3.0},</p>
+<p>{3.0, 1.0, 2.0},</p>
+<p>{2.0, 3.0, 1.0},</p>
+<p>{1.0, 3.0, 3.0}</p>
+<p>};</p>
+<p>// Create topology of the points (a vertex per point)</p>
+<p>vtkCellArray vertices = vtkCellArray.New();</p>
+<p>int nPts = 4;</p>
+<p>int[] ids = new int[nPts];</p>
+<p>for(int i = 0; i&lt;nPts; i++)</p>
+<p>ids[i] = (int)points.InsertNextPoint(p[i, 0], p[i, 1], p[i, 2]);</p>
+<p>int size = Marshal.SizeOf(typeof(int)) * nPts;</p>
+<p>IntPtr pIds = Marshal.AllocHGlobal(size);</p>
+<p>Marshal.Copy(ids, 0, pIds, nPts);</p>
+<p>vertices.InsertNextCell(nPts, pIds);</p>
+<p>Marshal.FreeHGlobal(pIds);</p>
+<p>// Create a polydata object</p>
+<p>vtkPolyData pointPoly = vtkPolyData.New();</p>
+<p>// Set the points and vertices we created as the geometry and topology of the polydata</p>
+<p>pointPoly.SetPoints(points);</p>
+<p>pointPoly.SetVerts(vertices);</p>
+<p>// Visualize</p>
+<p>vtkPolyDataMapper mapper = vtkPolyDataMapper.New();</p>
+<p>mapper.SetInputData(pointPoly);</p>
+<p>vtkActor actor = vtkActor.New();</p>
+<p>actor.SetMapper(mapper);</p>
+<p>actor.GetProperty().SetPointSize(10);</p>
+<p>vtkRenderWindow renderWindow = myRenderWindowControl.RenderWindow;</p>
+<p>vtkRenderer renderer = renderWindow.GetRenderers().GetFirstRenderer();</p>
+<p>renderer.SetBackground(0.3, 0.2, 0.1);</p>
+<p>renderer.AddActor(actor);</p>
+<p>}</p>
+<p>1.2//画三角形</p>
+<p>private void DrawTriangle()</p>
+<p>{</p>
+<p>//创建点数据</p>
+<p>vtkPoints points = vtkPoints.New();</p>
+<p>points.InsertNextPoint(1.0, 0.0, 0.0);</p>
+<p>points.InsertNextPoint(0.0, 1.0, 0.0);</p>
+<p>points.InsertNextPoint(0.0, 0.0, 0.0);</p>
+<p>//每两个坐标之间分别创建一条线</p>
+<p>//SetId()的第一个参数是线段的端点ID，第二参数是连接的的点的ID</p>
+<p>vtkLine line0 = vtkLine.New();</p>
+<p>line0.GetPointIds().SetId(0, 0);</p>
+<p>line0.GetPointIds().SetId(1, 1);</p>
+<p>vtkLine line1 = vtkLine.New();</p>
+<p>line1.GetPointIds().SetId(0, 1);</p>
+<p>line1.GetPointIds().SetId(1, 2);</p>
+<p>vtkLine line2 = vtkLine.New();</p>
+<p>line2.GetPointIds().SetId(0, 2);</p>
+<p>line2.GetPointIds().SetId(1, 0);</p>
+<p>//创建单元数组，用于存储以上创建的线段</p>
+<p>vtkCellArray lines = vtkCellArray.New();</p>
+<p>lines.InsertNextCell(line0);</p>
+<p>lines.InsertNextCell(line1);</p>
+<p>lines.InsertNextCell(line2);</p>
+<p>//将点和线加入数据集中，前者定义数据集的几何结构，后者定义拓扑结构</p>
+<p>//创建vtkPolyData类型的数据，是一种数据集</p>
+<p>vtkPolyData polyData = vtkPolyData.New();</p>
+<p>//将创建的点数据加入vtkPolyData数据里</p>
+<p>polyData.SetPoints(points); //点数据定义了polydata数据集的几何结构。</p>
+<p>polyData.SetLines(lines); //定义拓扑结构</p>
+<p>//显示数据</p>
+<p>vtkPolyDataMapper mapper = vtkPolyDataMapper.New();</p>
+<p>mapper.SetInputData(polyData);</p>
+<p>vtkActor actor = vtkActor.New();</p>
+<p>actor.SetMapper(mapper);</p>
+<p>actor.GetProperty().SetColor(1.0, 0.0, 0.0);</p>
+<p>vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;</p>
+<p>vtkRenderer renderer = renWin.GetRenderers().GetFirstRenderer();</p>
+<p>renderer.SetBackground(1.0, 1.0, 1.0);</p>
+<p>renderer.AddActor(actor);</p>
+<p>}</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk21.png" alt></p>
+<p>1.3//画圆柱</p>
+<p>private void DrawCylinder()</p>
+<p>{</p>
+<p>vtkCylinderSource cylinderSource = vtkCylinderSource.New();</p>
+<p>//cylinderSource.SetHeight(3.0);</p>
+<p>//cylinderSource.SetRadius(0.1);</p>
+<p>cylinderSource.SetResolution(8);</p>
+<p>vtkPolyDataMapper cylinderMapper = vtkPolyDataMapper.New();</p>
+<p>cylinderMapper.SetInputConnection(cylinderSource.GetOutputPort());</p>
+<p>vtkActor cylinderActor = vtkActor.New();</p>
+<p>cylinderActor.SetMapper(cylinderMapper);</p>
+<p>//cylinderActor.GetProperty().SetColor(1.0, 0.0, 0.0);</p>
+<p>cylinderActor.GetProperty().SetColor((float)Color.Tomato.R/256, (float)Color.Tomato.G/256, (float)Color.Tomato.B/256);</p>
+<p>cylinderActor.RotateX(30.0);</p>
+<p>cylinderActor.RotateY(-45.0);</p>
+<p>vtkRenderWindow renWin = renderWindowControl1.RenderWindow;</p>
+<p>vtkRenderer renderer = renWin.GetRenderers().GetFirstRenderer();</p>
+<p>renderer.SetBackground(1.0, 1.0, 1.0);</p>
+<p>renderer.AddActor(cylinderActor);</p>
+<p>}</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk22.png" alt></p>
+<p>1.4//画球体</p>
+<p>private void DrawSphere(double radius)</p>
+<p>{</p>
+<p>vtkSphereSource sphereSource = vtkSphereSource.New();</p>
+<p>sphereSource.SetThetaResolution(8);</p>
+<p>sphereSource.SetPhiResolution(16);</p>
+<p>sphereSource.SetRadius(radius);</p>
+<p>vtkShrinkPolyData shrink = vtkShrinkPolyData.New();</p>
+<p>shrink.SetInputConnection(sphereSource.GetOutputPort());</p>
+<p>shrink.SetShrinkFactor(0.8);</p>
+<p>vtkPolyDataMapper sphereMapper = vtkPolyDataMapper.New();</p>
+<p>//sphereMapper.SetInputConnection(sphereSource.GetOutputPort());</p>
+<p>sphereMapper.SetInputConnection(shrink.GetOutputPort());</p>
+<p>vtkActor sphereActor = vtkActor.New();</p>
+<p>sphereActor.SetMapper(sphereMapper);</p>
+<p>sphereActor.GetProperty().SetColor(1, 0, 0);</p>
+<p>vtkRenderer sphereRender = vtkRenderer.New();</p>
+<p>vtkRenderWindow renWin = renderWindowControl1.RenderWindow;</p>
+<p>renWin.AddRenderer(sphereRender);</p>
+<p>sphereRender.AddActor(sphereActor);</p>
+<p>sphereRender.SetBackground(0.0, 0.0, 1.0);</p>
+<p>}</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk23.png" alt></p>
+<p>1.5//画组合体</p>
+<p>private void DrawAssembly()</p>
+<p>{</p>
+<p>//Create four parts: a top level assembly and three primitives</p>
+<p>vtkSphereSource sphereSource = vtkSphereSource.New();</p>
+<p>vtkPolyDataMapper sphereMapper = vtkPolyDataMapper.New();</p>
+<p>sphereMapper.SetInputConnection(sphereSource.GetOutputPort());</p>
+<p>vtkActor sphereActor = vtkActor.New();</p>
+<p>sphereActor.SetMapper(sphereMapper);</p>
+<p>sphereActor.SetOrigin(2, 1, 3);</p>
+<p>sphereActor.RotateY(6);</p>
+<p>sphereActor.SetPosition(2.25, 0, 0);</p>
+<p>sphereActor.GetProperty().SetColor(1, 0, 1);</p>
+<p>vtkCubeSource cubeSource = vtkCubeSource.New();</p>
+<p>vtkPolyDataMapper cubeMapper = vtkPolyDataMapper.New();</p>
+<p>cubeMapper.SetInputConnection(cubeSource.GetOutputPort());</p>
+<p>vtkActor cubeActor = vtkActor.New();</p>
+<p>cubeActor.SetMapper(cubeMapper);</p>
+<p>cubeActor.SetPosition(0, 2.25, 0);</p>
+<p>cubeActor.GetProperty().SetColor(0, 0, 1);</p>
+<p>vtkConeSource coneSource = vtkConeSource.New();</p>
+<p>vtkPolyDataMapper coneMapper = vtkPolyDataMapper.New();</p>
+<p>coneMapper.SetInputConnection(coneSource.GetOutputPort());</p>
+<p>vtkActor coneActor = vtkActor.New();</p>
+<p>coneActor.SetMapper(coneMapper);</p>
+<p>coneActor.SetPosition(0, 0, 2.25);</p>
+<p>coneActor.GetProperty().SetColor(0, 1, 0);</p>
+<p>vtkCylinderSource cylinderSource = vtkCylinderSource.New();</p>
+<p>vtkPolyDataMapper cylinderMapper = vtkPolyDataMapper.New();</p>
+<p>cylinderMapper.SetInputConnection(cylinderSource.GetOutputPort());</p>
+<p>vtkActor cylinderActor = vtkActor.New();</p>
+<p>cylinderActor.SetMapper(cylinderMapper);</p>
+<p>//cylinderActor.SetPosition(0, 0, 0);</p>
+<p>cylinderActor.GetProperty().SetColor(1, 0, 0);</p>
+<p>vtkAssembly assembly = vtkAssembly.New();</p>
+<p>assembly.AddPart(cylinderActor);</p>
+<p>assembly.AddPart(sphereActor);</p>
+<p>assembly.AddPart(cubeActor);</p>
+<p>assembly.AddPart(coneActor);</p>
+<p>assembly.SetOrigin(5, 10, 5);</p>
+<p>assembly.AddPosition(5, 0, 0);</p>
+<p>assembly.RotateX(15);</p>
+<p>vtkRenderer renderer = vtkRenderer.New();</p>
+<p>vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;</p>
+<p>renWin.AddRenderer(renderer);</p>
+<p>renderer.AddActor(assembly);</p>
+<p>renderer.AddActor(coneActor);</p>
+<p>}</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk24.png" alt></p>
+<p>1.6//体数据提取等制图</p>
+<p>private void DrawVisQuad()</p>
+<p>{</p>
+<p>//# This example demonstrates the use of the contour filter, and the use of</p>
+<p>//# the vtkSampleFunction to generate a volume of data samples from an</p>
+<p>//# implicit function.</p>
+<p>//# VTK supports implicit functions of the form f(x,y,z)=constant. These</p>
+<p>//# functions can represent things spheres, cones, etc. Here we use a</p>
+<p>//# general form for a quadric to create an elliptical data field.</p>
+<p>vtkQuadric quadricFunction = vtkQuadric.New();</p>
+<p>quadricFunction.SetCoefficients(0.5, 1, 0.2, 0, 0.1, 0, 0, 0.2, 0, 0);</p>
+<p>//# vtkSampleFunction samples an implicit function over the x-y-z range</p>
+<p>//# specified (here it defaults to -1,1 in the x,y,z directions).</p>
+<p>vtkSampleFunction sample = vtkSampleFunction.New();</p>
+<p>sample.SetSampleDimensions(30, 30, 30);</p>
+<p>sample.SetImplicitFunction(quadricFunction);</p>
+<p>//# Create five surfaces F(x,y,z) = constant between range specified. The</p>
+<p>//# GenerateValues() method creates n isocontour values between the range</p>
+<p>//# specified.</p>
+<p>vtkContourFilter contourFilter = vtkContourFilter.New();</p>
+<p>contourFilter.SetInputConnection(sample.GetOutputPort());</p>
+<p>contourFilter.GenerateValues(10, 0.0, 1.2);</p>
+<p>vtkPolyDataMapper contMapper = vtkPolyDataMapper.New();</p>
+<p>contMapper.SetInputConnection(contourFilter.GetOutputPort());</p>
+<p>contMapper.SetScalarRange(0.0, 1.2);</p>
+<p>vtkActor conActor = vtkActor.New();</p>
+<p>conActor.SetMapper(contMapper);</p>
+<p>//We’ll put a simple outline around the data</p>
+<p>vtkOutlineFilter outline = vtkOutlineFilter.New();</p>
+<p>outline.SetInputConnection(sample.GetOutputPort());</p>
+<p>vtkPolyDataMapper outlineMapper = vtkPolyDataMapper.New();</p>
+<p>outlineMapper.SetInputConnection(outline.GetOutputPort());</p>
+<p>vtkActor outlineActor = vtkActor.New();</p>
+<p>outlineActor.SetMapper(outlineMapper);</p>
+<p>outlineActor.GetProperty().SetColor(0, 0, 0);</p>
+<p>//The usual rendering stuff</p>
+<p>vtkRenderer ren = vtkRenderer.New();</p>
+<p>vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;</p>
+<p>//vtkRenderWindow renWin = vtkRenderWindow.New();</p>
+<p>renWin.AddRenderer(ren);</p>
+<p>//vtkRenderWindowInteractor iren = vtkRenderWindowInteractor.New();</p>
+<p>//iren.SetRenderWindow(renWin);</p>
+<p>ren.SetBackground(1, 1, 1);</p>
+<p>ren.AddActor(conActor);</p>
+<p>ren.AddActor(outlineActor);</p>
+<p>//iren.Initialize();</p>
+<p>//renWin.Render();</p>
+<p>//iren.Start();</p>
+<p>}</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk25.png" alt></p>
+<p>1.7//生成非结构网格</p>
+<p>private void DrawBuildUGrid()</p>
+<p>{</p>
+<p>//# This example shows how to manually construct unstructured grids</p>
+<p>//# using C#. Unstructured grids require explicit point and cell</p>
+<p>//# representations, so every point and cell must be created, and then</p>
+<p>//# added to the vtkUnstructuredGrid instance.</p>
+<p>//# Create several unstructured grids each containing a cell of a</p>
+<p>//# different type.</p>
+<p>//create voxel</p>
+<p>vtkPoints voxelPoints = vtkPoints.New();</p>
+<p>voxelPoints.SetNumberOfPoints(8);</p>
+<p>voxelPoints.InsertPoint(0, 0, 0, 0);</p>
+<p>voxelPoints.InsertPoint(1, 1, 0, 0);</p>
+<p>voxelPoints.InsertPoint(2, 0, 1, 0);</p>
+<p>voxelPoints.InsertPoint(3, 1, 1, 0);</p>
+<p>voxelPoints.InsertPoint(4, 0, 0, 1);</p>
+<p>voxelPoints.InsertPoint(5, 1, 0, 1);</p>
+<p>voxelPoints.InsertPoint(6, 0, 1, 1);</p>
+<p>voxelPoints.InsertPoint(7, 1, 1, 1);</p>
+<p>vtkVoxel aVoxel = vtkVoxel.New();</p>
+<p>aVoxel.GetPointIds().SetId(0, 0);</p>
+<p>aVoxel.GetPointIds().SetId(1, 1);</p>
+<p>aVoxel.GetPointIds().SetId(2, 2);</p>
+<p>aVoxel.GetPointIds().SetId(3, 3);</p>
+<p>aVoxel.GetPointIds().SetId(4, 4);</p>
+<p>aVoxel.GetPointIds().SetId(5, 5);</p>
+<p>aVoxel.GetPointIds().SetId(6, 6);</p>
+<p>aVoxel.GetPointIds().SetId(7, 7);</p>
+<p>vtkUnstructuredGrid aVoxelGrid = vtkUnstructuredGrid.New();</p>
+<p>aVoxelGrid.Allocate(1, 1);</p>
+<p>aVoxelGrid.InsertNextCell(aVoxel.GetCellType(), aVoxel.GetPointIds());</p>
+<p>aVoxelGrid.SetPoints(voxelPoints);</p>
+<p>vtkDataSetMapper aVoxelMapper = vtkDataSetMapper.New();</p>
+<p>aVoxelMapper.SetInputData(aVoxelGrid);</p>
+<p>vtkActor aVoxelActor = vtkActor.New();</p>
+<p>aVoxelActor.SetMapper(aVoxelMapper);</p>
+<p>aVoxelActor.GetProperty().SetDiffuseColor(1, 0, 0);</p>
+<p>//create Hexahedron</p>
+<p>vtkPoints hexahedronPoints = new vtkPoints();</p>
+<p>hexahedronPoints.SetNumberOfPoints(8);</p>
+<p>hexahedronPoints.InsertPoint(0, 0, 0, 0);</p>
+<p>hexahedronPoints.InsertPoint(1, 1, 0, 0);</p>
+<p>hexahedronPoints.InsertPoint(2, 1, 1, 0);</p>
+<p>hexahedronPoints.InsertPoint(3, 0, 1, 0);</p>
+<p>hexahedronPoints.InsertPoint(4, 0, 0, 1);</p>
+<p>hexahedronPoints.InsertPoint(5, 1, 0, 1);</p>
+<p>hexahedronPoints.InsertPoint(6, 1, 1, 1);</p>
+<p>hexahedronPoints.InsertPoint(7, 0, 1, 1);</p>
+<p>vtkHexahedron aHexahedron = new vtkHexahedron();</p>
+<p>aHexahedron.GetPointIds().SetId(0, 0);</p>
+<p>aHexahedron.GetPointIds().SetId(1, 1);</p>
+<p>aHexahedron.GetPointIds().SetId(2, 2);</p>
+<p>aHexahedron.GetPointIds().SetId(3, 3);</p>
+<p>aHexahedron.GetPointIds().SetId(4, 4);</p>
+<p>aHexahedron.GetPointIds().SetId(5, 5);</p>
+<p>aHexahedron.GetPointIds().SetId(6, 6);</p>
+<p>aHexahedron.GetPointIds().SetId(7, 7);</p>
+<p>vtkUnstructuredGrid aHexahedronGrid = new vtkUnstructuredGrid();</p>
+<p>aHexahedronGrid.Allocate(1, 1);</p>
+<p>aHexahedronGrid.InsertNextCell(aHexahedron.GetCellType(), aHexahedron.GetPointIds());</p>
+<p>aHexahedronGrid.SetPoints(hexahedronPoints);</p>
+<p>vtkDataSetMapper aHexahedronMapper = new vtkDataSetMapper();</p>
+<p>aHexahedronMapper.SetInputData(aHexahedronGrid);</p>
+<p>vtkActor aHexahedronActor = new vtkActor();</p>
+<p>aHexahedronActor.SetMapper(aHexahedronMapper);</p>
+<p>aHexahedronActor.AddPosition(2, 0, 0);</p>
+<p>aHexahedronActor.GetProperty().SetDiffuseColor(1, 1, 0);</p>
+<p>vtkRenderer render = vtkRenderer.New();</p>
+<p>vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;</p>
+<p>renWin.AddRenderer(render);</p>
+<p>render.SetBackground(0, 0, 1);</p>
+<p>render.AddActor(aVoxelActor);</p>
+<p>render.AddActor(aHexahedronActor);</p>
+<p>}</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk26.png" alt></p>
+<p>2、读取源对象</p>
+<p>Vtk内置了有限的建模能力，但是如果相编辑和操作复杂模型，往往需要阅读器（reader）作为数据的接口，另一种方式是导入器（Importer），它的功能使导入整个场景。该示例读取了stereo-lithography文件（后缀.stl），用二进制stl文件文件格式表示的多边形数据。比如从网站<a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"></a><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">http://www.3dhoo.com/model/gongyesheji/34026.html读取锚钩并显示。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">其中用到了vtkLODActor（Level-Of-Detail Actor）演员，它能为了维持交互能性改变表示，它默认的行为是生成点云（point cloud）、框架（wireframe）、边界盒子（bounding-box）进而表示中间层和地层的表示。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">2.1//读取stl文件并显示</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">private void ReadStlFileDraw()</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">{</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkSTLReader stlReader = vtkSTLReader.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">stlReader.SetFileName(@”..\..\data\anchor_hook.stl”);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkPolyDataMapper stlMapper = vtkPolyDataMapper.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">stlMapper.SetInputConnection(stlReader.GetOutputPort());</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkLODActor stlActor = vtkLODActor.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">stlActor.SetMapper(stlMapper);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//stlActor.GetProperty().SetColor((float)Color.Orange.R/256, (float)Color.Orange.G / 256,(float)Color.Orange.B / 256); //设置actor的颜色</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkRenderer stlRender = vtkRenderer.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkRenderWindow renWin = renderWindowControl1.RenderWindow;</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">renWin.AddRenderer(stlRender);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">stlRender.AddActor(stlActor);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">stlRender.SetBackground(1.0, 1.0, 1.0);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">}</a></p>
+<p> <a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk27.png" alt> <img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk28.png" alt></a> </p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">2.2//贴图到平面</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">private void DrawTexturePlane()</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">{</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//load in the texture map</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkBMPReader bmpReader = vtkBMPReader.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">bmpReader.SetFileName(@”..\..\Data\masonry.bmp”);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkTexture atext = vtkTexture.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">atext.SetInputConnection(bmpReader.GetOutputPort());</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">atext.InterpolateOn();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//create a plane source and actor</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkPlaneSource plane = vtkPlaneSource.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">plane.SetPoint1(0, 0, 0);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkPolyDataMapper planeMapper = vtkPolyDataMapper.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">planeMapper.SetInputConnection(plane.GetOutputPort());</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkActor planeActor = vtkActor.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">planeActor.SetMapper(planeMapper);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">planeActor.SetTexture(atext);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkRenderer renderer = vtkRenderer.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">renWin.AddRenderer(renderer);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">renderer.AddActor(planeActor);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">}</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk29.png" alt></a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">2.3//画变量渲染颜色图</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">private void DrawRainBow()</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">{</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//# First create pipeline a simple pipeline that reads a structure grid</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//# and then extracts a plane from the grid. The plane will be colored</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//# differently by using different lookup tables.</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//#</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//# Note: the Update method is manually invoked because it causes the</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//# reader to read; later on we use the output of the reader to set</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//# a range for the scalar values.</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkMultiBlockPLOT3DReader pl3d = vtkMultiBlockPLOT3DReader.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">pl3d.SetXYZFileName(@”..\..\Data\combxyz.bin”);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">pl3d.SetQFileName(@”..\..\Data\combq.bin”);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">pl3d.SetScalarFunctionNumber(100);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">pl3d.SetVectorFunctionNumber(202);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">pl3d.Update();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkDataObject pl3d_output = pl3d.GetOutput().GetBlock(0);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkStructuredGridGeometryFilter planeFilter = vtkStructuredGridGeometryFilter.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">planeFilter.SetInputData(pl3d_output);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">planeFilter.SetExtent(1, 100, 1, 100, 7, 7);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkLookupTable lut = vtkLookupTable.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkPolyDataMapper planeMapper = vtkPolyDataMapper.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">planeMapper.SetLookupTable(lut);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">planeMapper.SetInputConnection(planeFilter.GetOutputPort());</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//planeMapper.SetScalarRange(pl3d_output.)</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkActor planeActor = vtkActor.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">planeActor.SetMapper(planeMapper);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//this creates an outline around the data</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkStructuredGridOutlineFilter outlineFilter = vtkStructuredGridOutlineFilter.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">outlineFilter.SetInputData(pl3d_output);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkPolyDataMapper outlineMapper = vtkPolyDataMapper.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">outlineMapper.SetInputConnection(outlineFilter.GetOutputPort());</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkActor outlineActor = vtkActor.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">outlineActor.SetMapper(outlineMapper);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//Much of the following is commented out. To try different lookup tables.</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//This create a black to white lut</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//lut.SetHueRange(0, 0);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//lut.SetSaturationRange(0, 0);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//lut.SetValueRange(0.2, 1.0);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//This creates a red to blue lut</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//lut.SetHueRange(0.0, 0.677);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//This creates a blue to red lue</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">lut.SetHueRange(0.667, 0.0);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//This creates a weird effect. the Build() method cause lookup</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//table to allocate memory and create a table based on the correct</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//hue, saturatioin, value, and alpha range. Here we then</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//manully overwrite the value generated by the Build() method.</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">lut.SetNumberOfColors(256);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">lut.Build();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">for(int i=0;i&lt;16;i++)</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">{</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">lut.SetTableValue(i * 16, (float)Color.Red.R / 256, (float)Color.Red.G / 256, (float)Color.Red.B / 256, 1);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">lut.SetTableValue(i * 16+1, (float)Color.Green.R / 256, (float)Color.Green.G / 256, (float)Color.Green.B / 256, 1);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">lut.SetTableValue(i * 16+2, (float)Color.Blue.R / 256, (float)Color.Blue.G / 256, (float)Color.Blue.B / 256, 1);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">lut.SetTableValue(i * 16+3, (float)Color.Black.R / 256, (float)Color.Black.G / 256, (float)Color.Black.B / 256, 1);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">}</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//Create the renderwindow, the render and both actors</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkRenderer ren = vtkRenderer.New();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkRenderWindow renWin = myRenderWindowControl.RenderWindow;</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">renWin.AddRenderer(ren);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">//Add the actors to the renderer, set the backgroud</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">ren.AddActor(outlineActor);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">ren.AddActor(planeActor);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">ren.SetBackground(0.1, 0.2, 0.4);</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">ren.TwoSidedLightingOff();</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">}</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk210.png" alt></a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">3、vtk交互</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkRenderWindowInteractor是vtk内置的界面交互类，是简单的方法，除此之外也可以通过事件绑定组作自己的交互器。Picking则鼠标在  平面上对数据选取时非常有用。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">vtkRenderWindowInteractor是进行交互的最简单方法，该类型预先定义了一些事件与行为，提供了默认行为。它允许控制相机、演员，并提供了两种交互模式：位置敏感（joystick mode）和移动敏感（trackball mode）。提供了键盘j（joystick模式）、t（trackball模式），c（camera敏感）、a（演员敏感），左键（旋转），右键（移动，shift+左键），中健（缩放）、e（退出应用）、q（退出应用），f（飞行模式，长按f飞鼠标位置）、p（拾取模式），r（恢复默认视角）、s（显示面）、u（调用用户定义方法）、w（显示框架）几种操作的事件。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk211.gif" alt></a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">三、可视化技术</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">可视化管线中的算法类，也即过滤器（filter）是根据所能处理的数据进行组织的，因此学习可视化管线技术的关键是理解各类数据类型。有些过滤器能作用在任意类型的数据上，即这些过滤器以vktDataSet类型数据（或它的子类）作为输入，这么说是因为vtkDataSet代表了所有离散类型的可视化数据。也有一些过滤器只能接受特定的数据类型，比如vtkPolyData，也有一些过滤器只能接受图像数据（vtkImageData）作为输入。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">需要记住的是：首先，过滤器可以产生多种类型的输出，输出的类型和输入的类型可以不相同；其次，过滤器用于组合产生负责的数据处理管线，通常有一定的使用模式或过滤器组合方式。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">1、可视化数据集（vtkDataSet）</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">数据集（vtkDataSet）是所有离散类型的可视化数据的父类，vtk中的数据集包括如下几种，有vtkPolyData，vtkImageData，vtkRectilinearGrid，vtkStructuredGrid， vtkUnstructuredGrid。所有可以接受vtkDataSet的过滤器也可以接受它的子类。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk212.png" alt></a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">数据属性是依赖于数据集的信息。在vtk中属性数据可以依赖于点（point attribute data），也可以依赖于拓扑结构（cell attribute data）。依赖于数据集结构的属性数据可以被很多过滤器处理，并产生新的结构和属性。表示数据属性的类是vtkDataArray，可以标记为标量、向量、张量、法向量、纹理坐标、全局ids（用于确定冗余元素redundant element），有来源的ids（pedigree用于跟踪管线中的元素）。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">数据集的点points和拓扑结构cells有他们各自独立的数据属性，数据属性可以依赖于数据集的点或拓扑结构，与vtkDataSet关联的所有数据属性都是vtkDataArray的子类，比如vtkFloatArray，vtkDoubleArray或vtkIntArray，数据矩阵（data array）可以视作具有本地属性名字的连续的、线性的内存块，在这个线性内存块中，数据向量可以认为有子向量或元组组成。生成属性数据意味着实例化一种数据类型的数组，通过给定元组的大小、插入数据，并把它与数据集相关联。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk213.png" alt><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk214.png" alt></a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk215.png" alt><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk216.png" alt></a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk217.png" alt><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk218.png" alt></a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">2、单元类型cellTpye，也称拓扑结构</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">包括线性单元类型和非线性单元类型，共有74种。</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">typedef enum {</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">// Linear cells</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_EMPTY_CELL = 0,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_VERTEX = 1,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_POLY_VERTEX = 2,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_LINE = 3,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_POLY_LINE = 4,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_TRIANGLE = 5,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_TRIANGLE_STRIP = 6,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_POLYGON = 7,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PIXEL = 8,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUAD = 9,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_TETRA = 10,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_VOXEL = 11,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HEXAHEDRON = 12,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_WEDGE = 13,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PYRAMID = 14,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PENTAGONAL_PRISM = 15,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HEXAGONAL_PRISM = 16,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">// Quadratic, isoparametric cells</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_EDGE = 21,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_TRIANGLE = 22,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_QUAD = 23,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_POLYGON = 36,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_TETRA = 24,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_HEXAHEDRON = 25,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_WEDGE = 26,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_PYRAMID = 27,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_BIQUADRATIC_QUAD = 28,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_TRIQUADRATIC_HEXAHEDRON = 29,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_LINEAR_QUAD = 30,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_QUADRATIC_LINEAR_WEDGE = 31,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_BIQUADRATIC_QUADRATIC_WEDGE = 32,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_BIQUADRATIC_QUADRATIC_HEXAHEDRON = 33,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_BIQUADRATIC_TRIANGLE = 34,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">// Cubic, isoparametric cell</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_CUBIC_LINE = 35,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">// Special class of cells formed by convex group of points</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_CONVEX_POINT_SET = 41,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">// Polyhedron cell (consisting of polygonal faces)</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_POLYHEDRON = 42,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">// Higher order cells in parametric form</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PARAMETRIC_CURVE = 51,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PARAMETRIC_SURFACE = 52,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PARAMETRIC_TRI_SURFACE = 53,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PARAMETRIC_QUAD_SURFACE = 54,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PARAMETRIC_TETRA_REGION = 55,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_PARAMETRIC_HEX_REGION = 56,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">// Higher order cells</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HIGHER_ORDER_EDGE = 60,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HIGHER_ORDER_TRIANGLE = 61,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HIGHER_ORDER_QUAD = 62,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HIGHER_ORDER_POLYGON = 63,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HIGHER_ORDER_TETRAHEDRON = 64,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HIGHER_ORDER_WEDGE = 65,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HIGHER_ORDER_PYRAMID = 66,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_HIGHER_ORDER_HEXAHEDRON = 67,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">// Arbitrary order Lagrange elements (formulated separated from generic higher order</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_LAGRANGE_CURVE = 68,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_LAGRANGE_TRIANGLE = 69,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_LAGRANGE_QUADRILATERAL = 70,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_LAGRANGE_TETRAHEDRON = 71,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_LAGRANGE_HEXAHEDRON = 72,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_LAGRANGE_WEDGE = 73,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_LAGRANGE_PYRAMID = 74,</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">VTK_NUMBER_OF_CELL_TYPES</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener">} VTKCellType;</a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk219.png" alt></a></p>
+<p><a href="http://www.3dhoo.com/model/gongyesheji/34026.html" target="_blank" rel="noopener"><img src="http://afengwind.files.wordpress.com/2019/02/022519_0856_vtk220.png" alt></a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/软件开发//" class="article-tag-list-link color5">软件开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/25/vtk-e4-b8-89-e7-bb-b4-e5-8f-af-e8-a7-86-e5-8c-96-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b02/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 
 
@@ -376,6 +2156,130 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">fracture</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数学地质</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Segy</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">C#</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C# sequence random</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">元胞自动机</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">SCI</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">3D</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">activiz</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vtk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">基督教</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">动态分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">说话</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">油藏动态</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">健康</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">绘画</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vba</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">文学</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">模式识别</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">词根词缀</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">页岩气</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">OPENTK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">2d</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">digital rock</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">软件设计</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">C</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">画家电影</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ocr</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
