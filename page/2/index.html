@@ -152,99 +152,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-e5-88-a9-e7-94-a8activiz-e7-94-bb-e7-82-b9-e5-92-8c-e4-b8-89-e8-a7-92-e5-bd-a2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/21/e5-88-a9-e7-94-a8activiz-e7-94-bb-e7-82-b9-e5-92-8c-e4-b8-89-e8-a7-92-e5-bd-a2/">利用activiz画点和三角形</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/21/e5-88-a9-e7-94-a8activiz-e7-94-bb-e7-82-b9-e5-92-8c-e4-b8-89-e8-a7-92-e5-bd-a2/" class="archive-article-date">
-  	<time datetime="2019-02-20T23:22:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>using System; using System.Runtime.InteropServices; using System.Windows.Forms; using Kitware.VTK; namespace ActivizLearn { public partial class Form1 : Form { private RenderWindowControl renderWindowControl1; public Form1() { InitializeComponent(); renderWindowControl1 = new RenderWindowControl(); renderWindowControl1.SetBounds(0, 0, panel1.Width, panel1.Height); renderWindowControl1.Dock = DockStyle.Fill; panel1.Controls.Add(this.renderWindowControl1); renderWindowControl1.Load += RenderWindowControl1_Load; } private void RenderWindowControl1_Load(object sender, System.EventArgs e) { try { DrawPoint(); //DrawTriangle(); } catch(Exception ex) { MessageBox.Show(ex.Message, “Exception”, MessageBoxButtons.OK); } } private void DrawPoint() { // Create the geometry of the points (the coordinate) vtkPoints points = vtkPoints.New(); double[,] p = new double[,] { {1.0, 2.0, 3.0}, {3.0, 1.0, 2.0}, {2.0, 3.0, 1.0}, {1.0, 3.0, 3.0} }; // Create topology of the points (a vertex per point) vtkCellArray vertices = vtkCellArray.New(); int nPts = 4; int[] ids = new int[nPts]; for(int i = 0; i&lt;nPts; i++) ids[i] = (int)points.InsertNextPoint(p[i, 0], p[i, 1], p[i, 2]); int size = Marshal.SizeOf(typeof(int)) * nPts; IntPtr pIds = Marshal.AllocHGlobal(size); Marshal.Copy(ids, 0, pIds, nPts); vertices.InsertNextCell(nPts, pIds); Marshal.FreeHGlobal(pIds); // Create a polydata object vtkPolyData pointPoly = vtkPolyData.New(); // Set the points and vertices we created as the geometry and topology of the polydata pointPoly.SetPoints(points); pointPoly.SetVerts(vertices); // Visualize vtkPolyDataMapper mapper = vtkPolyDataMapper.New(); mapper.SetInputData(pointPoly); vtkActor actor = vtkActor.New(); actor.SetMapper(mapper); actor.GetProperty().SetPointSize(10); vtkRenderWindow renderWindow = renderWindowControl1.RenderWindow; vtkRenderer renderer = renderWindow.GetRenderers().GetFirstRenderer(); renderer.SetBackground(0.3, 0.2, 0.1); renderer.AddActor(actor); } private void DrawTriangle() { //创建点数据 vtkPoints points = vtkPoints.New(); points.InsertNextPoint(1.0, 0.0, 0.0); points.InsertNextPoint(0.0, 1.0, 0.0); points.InsertNextPoint(0.0, 0.0, 0.0); //每两个坐标之间分别创建一条线 //SetId()的第一个参数是线段的端点ID，第二参数是连接的的点的ID vtkLine line0 = vtkLine.New(); line0.GetPointIds().SetId(0, 0); line0.GetPointIds().SetId(1, 1); vtkLine line1 = vtkLine.New(); line1.GetPointIds().SetId(0, 1); line1.GetPointIds().SetId(1, 2); vtkLine line2 = vtkLine.New(); line2.GetPointIds().SetId(0, 2); line2.GetPointIds().SetId(1, 0); //创建单元数组，用于存储以上创建的线段 vtkCellArray lines = vtkCellArray.New(); lines.InsertNextCell(line0); lines.InsertNextCell(line1); lines.InsertNextCell(line2); //将点和线加入数据集中，前者定义数据集的几何结构，后者定义拓扑结构 //创建vtkPolyData类型的数据，是一种数据集 vtkPolyData polyData = vtkPolyData.New(); //将创建的点数据加入vtkPolyData数据里 polyData.SetPoints(points); //点数据定义了polydata数据集的几何结构。 polyData.SetLines(lines); //定义拓扑结构 //显示数据 vtkPolyDataMapper mapper = vtkPolyDataMapper.New(); mapper.SetInputData(polyData); vtkActor actor = vtkActor.New(); actor.SetMapper(mapper); actor.GetProperty().SetColor(1.0, 0.0, 0.0); vtkRenderWindow renWin = renderWindowControl1.RenderWindow; vtkRenderer renderer = renWin.GetRenderers().GetFirstRenderer(); renderer.SetBackground(1.0, 1.0, 1.0); renderer.AddActor(actor); } private void panel1_Resize(object sender, EventArgs e) { renderWindowControl1.SetBounds(0, 0, panel1.Width, panel1.Height); } } } <img src="http://afengwind.files.wordpress.com/2019/02/022119_0722_activiz1.png" alt> <img src="http://afengwind.files.wordpress.com/2019/02/022119_0722_activiz2.png" alt></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">3D</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">activiz</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vtk</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/软件开发//" class="article-tag-list-link color5">软件开发</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/21/e5-88-a9-e7-94-a8activiz-e7-94-bb-e7-82-b9-e5-92-8c-e4-b8-89-e8-a7-92-e5-bd-a2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-opengl-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b02" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1194,6 +1101,129 @@ return r
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/01/22/c-e5-9f-ba-e7-a1-80-e9-9d-a2-e5-90-91-e5-af-b9-e8-b1-a1-e5-bb-ba-e6-a8-a1-e6-96-b9-e6-b3-95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-e4-bb-a3-e6-95-b0-e5-a4-9a-e9-87-8d-e7-bd-91-e6-a0-bc-e7-ae-97-e6-b3-95-ef-bc-88amg-ef-bc-89" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/21/e4-bb-a3-e6-95-b0-e5-a4-9a-e9-87-8d-e7-bd-91-e6-a0-bc-e7-ae-97-e6-b3-95-ef-bc-88amg-ef-bc-89/">代数多重网格算法（AMG）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/21/e4-bb-a3-e6-95-b0-e5-a4-9a-e9-87-8d-e7-bd-91-e6-a0-bc-e7-ae-97-e6-b3-95-ef-bc-88amg-ef-bc-89/" class="archive-article-date">
+  	<time datetime="2019-01-21T00:41:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>（1）代数多重网格简介</p>
+<p>尽管现代科学计算从计算技术的发展中受益很大，但是我们模拟复杂物理系统的能力更多则是因为我们改进了算法，特别是在线性方程组求解领域。偏微分方程离散后得到的矩阵方程能够多尺度求解器高效求解，比如多重网格法。</p>
+<p>真正的多重网格方法的描述是Fedorenko于1961给出的，随后在1964年他给出了一个特殊问题的多重网格方法，并给出了它的收敛性证明。Bachvalov和Astrakhantsev分别给出了更复杂的一些情况下的结果。但这三人是前苏联科学家，他们的工作一直没有受到重视。1972年Brandt说明了多重网格法的有效性，第一次引起了西方科学家对多重网格方法的关注。随后欧美的计算数学家投入了极大的精力到多重网格方法的研究中，大量的关于收敛性的证明出现。Nicolaides，Bank，Dupont，Hackbusch，Douglas，Bramble and Pasciak的一批学者都投入到这一工作中。其中，Hackbusch曾于上世纪八十年代多次到中国讲授他的理论，使我国的学者接触到多重网格方法。结合有限元方法，多重网格方法被用来计算求解各种各样的计算问题。多重网格方法的研究成为一个热点。</p>
+<p>根据误差理论，可将线性方程组的误差Fourier分量分为高频分量和低频分量两类。高频分量在迭代过程中会迅速衰减，而低频分量则衰减缓慢。传统的迭代法，如Jacobi迭代法和Gauss-Seidel迭代法等迅速平滑误差高频分量，但对误差低频分量却衰减缓慢。多重网格法是迭代算法的一种。它的基本思想是：在不同规模网格上求解同一问题，细网格只负责误差高频分量的消除；而低频分量的消除则由粗网格负责完成。细网格光滑、粗网格校正、嵌套迭代技术是该算法的3个关键点。在细网格上光滑迭代消除误差的高频分量，然后对误差的低频分量在更粗网格上进行，嵌套迭代技术通过限制和延拓算法连接所有层求解同一问题。这种细网格光滑与粗网格校正过程的有机结合，便构成了多重网格法，即几何多重网格法。</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG1.png" alt></p>
+<p>代数多重网格（Algebraic multigrid，AMG）比几何多重网格（Geometric multigrid，MG）更有优势，特别是在复杂几何网格或非结构网格上，因为在这些网格上的PDE系数变化非常大或者不连续，导致经典的多重网格，即几何多重网格算法非常不适用。</p>
+<p>多重网格法(mufti-grid method)求解偏微分问题离散方程的一种快速迭代方法.是求解由椭圆边值问题离散化而得的线性代数方程组的非常有效的快速迭代方法。多重网格过程的基本步骤是：先在细网格上作松弛迭代，然后将误差投影到粗一层网格上去，在粗网格上又作松弛迭代，继续磨光相应的高频部分。依次类推，直到最粗的一层。在最粗的一层上方程组已非常少，可方便地用直接解法求解。然后，用插值算子将所求得的误差返回到细网格上去，用以修正原有结果，这称为粗网格校正过程。经过校正之后又可进一步作迭代，并继续返回到更细的一层，直到最细的一层为止。这就是完整的一个多重网格过程。</p>
+<p>现在多重网格方法的研究依然是一个热点，特别是在非线性非对称问题的求解上的使用。还有很多的学者在做这方面的研究。另一个发展方向是方法的推广和软件实现。由于在很多学科中，求解偏微分方程的软件有着很大的市场。虽然在计算数学家中，多重网格方法是求解大型问题时最有效的方法，但在物理学家和力学家中还没有足够的知名度，在他们的工作中还没有得到充分的使用。<strong>所以多重网格方法的软件编写实现成为一个热点。</strong>多重网格方法在推广上的难点主要是方法的理论本身比较有难度，接受起来比较困难。加上针对不同的问题有不同的方法，一般上手不是很容易。现在也需要发展一套普遍性技术，可使人们对很多不同的算法有更深刻的理解和做更简明的理论分析。</p>
+<p>为了寻找一种既能保持多重网格过程的优点，又能客服网格剖面缺点的办法。先后有所谓的黑盒子多重网格法（Black Box Multigrid）以及实际网格不变的各种办法，例如p意义下的多重网格等也可看作是这种努力。1982年A.Brandt, S.McCormick和J.Ruge首先提出代数多重网格法的概念。经过几年的发展，这一方法已日趋成熟。它可以克服一般多重网格法的上述缺陷，同时又能保持活基本保持多重网格过程的优点。为了与代数多重网格法区分，有的作者又将普通意义下的多重网格称作几何多重网格法。</p>
+<p>（2）代数多重网格运算步骤</p>
+<p>代数多重网格法的求解对象是满足一定条件的代数（线性或非线性）方程组</p>
+<p>Au=f</p>
+<p>这里系数矩阵A是系数矩阵，将上式作为最细一层网格上的方程，记成Au1=f1</p>
+<p>所谓最细一层网格是将未知量u1的分量u11，u12，…，u1n想象成由n个结点所虚构称的网格上定义的网格函数。这n个结点用p1，p2，…，pn表示，或简单地用其代码1，2，…n表示。这一虚构的网格记成O1，作为最细的一层网格。如矩阵A1的系数</p>
+<p>A1ij=0，表示pi和pj两个结点是不相邻接的。否则，表示pi与pj是相互连接的两个结点。而且，如有|a1ij|&gt;|a1ik|，则称pi与pj之间的邻接程度比pi与pk之间要强。</p>
+<p>显然，这里用O1表示最细的一层网格，与几何多重网格法的习惯刚好相反。在几何多重网格法中习惯上将O1作为最粗一层的网格。</p>
+<p>为了使用多重网格过程，必须从最细的一层网格出发构造一个网格序列，它们一个比一个更粗。即，构造O2，O3，…，Ok使得</p>
+<p>Ok&lt;Ok-1&lt;…&lt;O3&lt;O2&lt;O1</p>
+<p>在构成这些网格时，要在同一网格上确定相应的系数矩阵A2，A3，…，Ak。此外还要建立相邻网格层之间的联系。即建立插值算子与投影算子。从粗网格到细网格的插值算子记成：</p>
+<p>I（q，q-1）：Oq-&gt;Oq-1</p>
+<p>从细网格到粗网格的投影算子记成：</p>
+<p>I（q-1，q）：Oq-1-&gt;Qq</p>
+<p>在第q层上做磨光迭代，其迭代格式记成：</p>
+<p>uq=L（uq，fq）</p>
+<p>这里粗网格的构成、粗网格上系数矩阵Aq的形成，插值与投影算子的建立、迭代格式的选取等时多重网格的主要元件。一旦这些原件确定后，就可以引用下属AMG过程。</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG2.png" alt></p>
+<p>AMG算法是在几何多重网格算法的思想上延申建立起来的，是一种自动求解大型稀疏线性方程组的迭代算法。它不需要利用求解问题的物理和几何背景，仅利用方程系数矩阵的代数信息构造多重网格算法的步骤。在AMG算法中，定义矩阵A的连接图G=（V，E）作为AMG的虚拟网格。算法包括Setup和Solution两个阶段。Setup阶段定义多重网格的各组成部分；嵌套网格层、限制和插值算子、网格算子和光滑算子（一般为Gauss-Seidel迭代或Jacobi迭代）等。Solution阶段执行多重网格循环，如V-循环，W-循环和FMG等。</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG3.png" alt></p>
+<p>使用AMG算法求解系数矩阵方程组Au=f（其中，A为n*n稀疏矩阵，u，f为稠密向量，已知向量f，求解向量u），包含两个阶段：建立阶段和求解阶段。在建立阶段，根据已知稀疏矩阵A构造虚拟的网格层Ω1，Ω2，…，Ωm（其中m为最大网格层数），在各网格层上构建操作算子A1，A2，…，Am，相邻网格层之间的转化算子——差值算子I（h,h+1）,h=1,…,m-1，和限制算子I（h+1，h），h=1，2，…，m-1。在求解阶段，根据第一阶段构造的各网格层和各层算子，用多重网格法求解。首先对1，2，…，m-1网格层用光滑算法迭代μ次，求出余差rm并对其进行粗化，继而传递到下一层粗网格并继续刚才的过程。在最粗的网格层，用高斯消去的法直接求解Amem=rm，每层求解处的残差值em进行插值并传递到上一层网格，最后用光滑算法迭代μ次。</p>
+<p>在任意的多重网格方法中，中心思想是”光滑误差”e，它不能在松弛中舍弃掉，必须在粗网格上校正，具体方法是在粗网格上求解残余方程Ae=r，然后把求解的误差插值到细网格上，并校正细网格的值u=u+e。</p>
+<p>AMG算法有四部分组成：</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG4.png" alt></p>
+<p>AMG算法的组件需要单独在前处理中完成，称为设置阶段</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG5.png" alt></p>
+<p>当上述四个组成部分定义完成之后，通过递归调用实现循环迭代</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG6.png" alt></p>
+<p>高斯-赛德尔迭代法是解<a href="https://baike.baidu.com/item/%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84" target="_blank" rel="noopener">线性方程组</a>的常用迭代法之一，设线性方程组为</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG7.png" alt></p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG8.png" alt></p>
+<p>高斯-赛德尔迭代法的迭代公式为</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG9.png" alt></p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG10.png" alt></p>
+<p>当然，此处假定</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG11.png" alt></p>
+<p>，在很多情况下，它比简单迭代法收敛快，它和简单迭代法的不同点在于计算</p>
+<p> <img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG12.png" alt> </p>
+<p>时，利用了刚刚迭代出的</p>
+<p><img src="http://afengwind.files.wordpress.com/2019/01/012119_0840_AMG13.png" alt></p>
+<p>的值，当系数矩阵 A 严格对角占优或对称正定时，高斯-赛德尔迭代法必收敛。</p>
+<p>郭飞霄, 杨力, 刘荣,等. 大型稀疏法方程组的代数多重网格解法[J]. 测绘科学技术学报, 2012, 29(1):5-8.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/油藏地质//" class="article-tag-list-link color5">油藏地质</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/21/e4-bb-a3-e6-95-b0-e5-a4-9a-e9-87-8d-e7-bd-91-e6-a0-bc-e7-ae-97-e6-b3-95-ef-bc-88amg-ef-bc-89/">展开全文 >></a>
         </p>
       
 

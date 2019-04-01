@@ -152,89 +152,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-e7-bb-9f-e8-ae-a1-e5-ad-a6-e4-b9-a0-e6-96-b9-e6-b3-95-k-e8-bf-91-e9-82-bb-e6-b3-95" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/07/e7-bb-9f-e8-ae-a1-e5-ad-a6-e4-b9-a0-e6-96-b9-e6-b3-95-k-e8-bf-91-e9-82-bb-e6-b3-95/">统计学习方法---K近邻法</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/07/e7-bb-9f-e8-ae-a1-e5-ad-a6-e4-b9-a0-e6-96-b9-e6-b3-95-k-e8-bf-91-e9-82-bb-e6-b3-95/" class="archive-article-date">
-  	<time datetime="2017-06-06T16:43:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>K近邻法师一种基本分类和回归方法。K近邻法假设给定一个训练集，其中的实例类别已定。分类时，对新的实例，根据其k个最近邻的训练实例的类别，通过多数表决等方式进行预测。</p>
-<p>K近邻法不具有显式的学习过程，k近邻法实际上利用数据集对特征向量空间划分，并作为其分类的”模型”。</p>
-<p>K值的选择、距离度量及分类决策规则是k近邻法的三个基本要素。</p>
-<p>K近邻法中，当训练集、距离度量、k值及分类决策规则确定后，对任何一个新的输入实例，它所属的类唯一确定。这相当于根据上述要素将特征空间划分为一些子空间，确定子空间里每个点所属的类。</p>
-<p>特征空间中，对每个训练实例点xi，距离该点比其他点更近的所有点组成一个区域，叫做单元。每个训练实例点都拥有一个单元，所有实例点的单元构成对特征空间的一个划分。最近邻法将实例xi的类yi作为其单元中所有店的类标记。</p>
-<p>K值得选择会对k近邻法的结果产生重大影响。如果选择较小的k值，就相当于用较小的邻域中的训练实例进行预测，k值得减小意味着整体模型变得复杂，容易发生过拟合。</p>
-<p>实现k近邻法时，主要考虑的问题是如何对训练数据进行快速k近邻搜索。</p>
-<p>K近邻法最简单的实现方法是线性扫描，这时要计算输入实例与每一个训练实例的距离。当训练集很大时，这种方法是不可行的。为了提高k近邻法搜索的效率，可以考虑使用特殊的结构存储训练数据，以减少计算距离的次数。kd树是一种。</p>
-<p>kd树是一种对k维空间中的实例点进行存储以便快速检索的树形数据结构。kd树是二叉树，表示对k维空间的一个划分。构造kd树相当于不断地用垂直于坐标轴的超平面将k维空间切分，构成一系列的k维超矩形区域。</p>
-<p><img src="http://afengwind.files.wordpress.com/2017/06/060717_0043_k1.png" alt></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/人工智能//" class="article-tag-list-link color5">人工智能</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/07/e7-bb-9f-e8-ae-a1-e5-ad-a6-e4-b9-a0-e6-96-b9-e6-b3-95-k-e8-bf-91-e9-82-bb-e6-b3-95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-e5-b1-82-e5-ba-8f-e5-9c-b0-e5-b1-82-e5-ad-a6-ef-bc-88-e6-9c-b1-e6-99-93-e6-95-8f-ef-bc-89" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1278,6 +1195,90 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/04/05/e9-9d-9e-e7-ba-bf-e6-80-a7-e6-96-b9-e7-a8-8b-e7-bb-84-e6-b1-82-e8-a7-a3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-e8-ae-ba-e5-9c-b0-e8-b4-a8-e7-bb-93-e6-9e-84-e4-b8-8e-e8-a7-86-e8-a7-89-e8-89-ba-e6-9c-af-e7-9a-84-e6-99-ba-e8-83-bd-e5-86-8d-e7-8e-b0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/05/e8-ae-ba-e5-9c-b0-e8-b4-a8-e7-bb-93-e6-9e-84-e4-b8-8e-e8-a7-86-e8-a7-89-e8-89-ba-e6-9c-af-e7-9a-84-e6-99-ba-e8-83-bd-e5-86-8d-e7-8e-b0/">论地质结构与视觉艺术的智能再现</a>
+    </h1>
+  
+
+        
+        <a href="/2017/04/05/e8-ae-ba-e5-9c-b0-e8-b4-a8-e7-bb-93-e6-9e-84-e4-b8-8e-e8-a7-86-e8-a7-89-e8-89-ba-e6-9c-af-e7-9a-84-e6-99-ba-e8-83-bd-e5-86-8d-e7-8e-b0/" class="archive-article-date">
+  	<time datetime="2017-04-04T17:41:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>油藏开发中很大一部分工作在于地下多尺度地质结构的建立，而一件作品之所以具有艺术价值很大程度上是因为它具有特殊的结构属性，因此，地质研究与艺术创作或欣赏具有很强的内在联系。</p>
+<p>地质结构是大自然鬼斧神工的艺术创造，这里的结构不仅仅是形态结构，也包括组成结构、质地结构、颜色结构。对一件艺术品的认识，除了题材、情景和意蕴这些社会化信息，更重要的是作品本身传达的形态结构、颜色结构、明暗结构。</p>
+<p>地质结构的呈现形式是三维像素模型，艺术品是二维或三维像素模型，它们之间的关系可以借助数学工具表达。解释这个问题最好的方式可能就是研究了很长时间的图像识别理论。为了区分两个图像的相似程度或者提取图像所表达的信息，在图像识别中，甚至在语音识别或字符串语义识别中，图像/语音/字符模式的<strong>结构信息</strong>都是关注的重点。</p>
+<p>为了准确提取和操作这些结构信息，很多数学方法发挥了巨大作用，比如运筹学、拓扑学、离散数学、图论等。前段时间看新闻说谷歌的人工智能已经可以进行艺术创作了，机器能够绘制的艺术作品，它一定是提取了已有艺术作品中海量结构信息才能做到这样的。它是如何做到的呢？肯定不能缺少模式识别理论。</p>
+<p>一幅作品可以视作是一组模式的组合，而那些模式又是子模式的组合，子模式下面又有子模式，直至最小的模式，称为模式元。每一层次的子模式都有相应的关系运算，利用模式元和关系操作可以建立任意作品（模型/模式）。现在，许多人工智能算法，包括深度学习算法，都在如何建立合理的模式结构体系方面挖掘可能。</p>
+<p>同样地，油气藏由多尺度地质结构加上流体组成，不同尺度的模式结构也是地质模型建立的关键，现有的多点地质统计学主要目标就是重现这种结构信息。这其中，最关键的是如何用数学方法建立地质模式多层次结构信息，因为这种信息即使观看者本人用语言也很难说出来。</p>
+<p>比如，我们看到一件艺术品，觉得很美，很有艺术感，如何用数学语言表达呢。如果人为地定义模式元和关系操作符，其工作量是非常大的，也很难划分的准确，必须借助数学的方法。这就要求数学算法能够读取二维/三维图形中多种尺度的目标体形态和关系，即自动的拆分方法和重建规则。最关键的是组成运算和关系运算。</p>
+<p>这样，我们就可以编写算法，建立地质模型或进行艺术创作，再或者进入人工智能领域，做些其他的事情。</p>
+<p>-----------------------------</p>
+<p><a href="http://www.yanfeng1022.me" target="_blank" rel="noopener">www.yanfeng1022.me</a></p>
+<p><img src="http://afengwind.files.wordpress.com/2017/04/040517_0141_1.jpg" alt></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/人工智能//" class="article-tag-list-link color5">人工智能</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/05/e8-ae-ba-e5-9c-b0-e8-b4-a8-e7-bb-93-e6-9e-84-e4-b8-8e-e8-a7-86-e8-a7-89-e8-89-ba-e6-9c-af-e7-9a-84-e6-99-ba-e8-83-bd-e5-86-8d-e7-8e-b0/">展开全文 >></a>
         </p>
       
 
